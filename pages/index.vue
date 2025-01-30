@@ -1,46 +1,63 @@
 <template>
-  <div class="container">
-    <h1>Mini Smart Scraper</h1>
+  <div class="container mx-auto p-4">
+    <h1 class="text-5xl font-bold mb-4">
+      Mini Smart <span class="text-primary-800">Scraper</span>
+    </h1>
 
-    <form @submit.prevent="handleSubmit" class="form">
-      <div>
-        <label for="urls">Enter URLs (one per line):</label><br />
+    <form
+      @submit.prevent="handleSubmit"
+      class="bg-secondary-50 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+    >
+      <div class="mb-4">
+        <label for="urls" class="block text-gray-700 text-sm font-bold mb-2"
+          >Enter URLs (one per line):</label
+        >
         <textarea
           id="urls"
           v-model="urlsInput"
           rows="5"
+          required
           placeholder="https://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies&#10;https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         ></textarea>
       </div>
 
-      <div>
-        <label for="prompt">Prompt / Instructions:</label><br />
+      <div class="mb-6">
+        <label for="prompt" class="block text-gray-700 text-sm font-bold mb-2"
+          >Prompt / Instructions:</label
+        >
         <input
           id="prompt"
           v-model="prompt"
           type="text"
+          required
           placeholder="e.g. Extract the GDP growth rate (be as detailed as possible)"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
 
-      <button type="submit" style="margin-top: 1rem">Scrape</button>
+      <button
+        type="submit"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Scrape
+      </button>
     </form>
 
-    <hr />
+    <hr class="my-8" />
 
-    <div v-if="pendingMessage" style="color: green">
-      <h3>Status</h3>
+    <div v-if="pendingMessage" class="text-green-500">
+      <h3 class="text-lg font-bold mb-2">Status</h3>
       <p>{{ pendingMessage }}</p>
     </div>
 
-    <!-- Display response data -->
-    <div v-if="finalResult">
-      <h2>Response Data</h2>
-      <pre>{{ finalResult }}</pre>
+    <div v-if="finalResult" class="bg-gray-100 rounded p-4 overflow-x-auto">
+      <h2 class="text-lg font-bold mb-2">Response Data</h2>
+      <pre class="text-sm whitespace-pre-wrap">{{ finalResult }}</pre>
     </div>
 
-    <div v-if="errorMessage" style="color: red">
-      <h3>Error</h3>
+    <div v-if="errorMessage" class="text-red-500">
+      <h3 class="text-lg font-bold mb-2">Error</h3>
       <p>{{ errorMessage }}</p>
     </div>
   </div>
@@ -48,14 +65,16 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-    type ParsedObject = {
-      url: string;
-      html?: string;
-      error?: string;
-    };
+type ParsedObject = {
+  url: string;
+  html?: string;
+  error?: string;
+};
 // - TODO:
 // remove the default values
-const urlsInput = ref(`https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025\nhttps://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`);
+const urlsInput = ref(
+  `https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025\nhttps://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`,
+);
 const prompt = ref("");
 const responseData = ref();
 const finalResult = ref(null);
@@ -74,7 +93,7 @@ async function handleSubmit() {
       .filter(Boolean);
 
     // Make a POST request to our /api/scrape endpoint
-    pendingMessage.value = "Scraping URLs..."
+    pendingMessage.value = "Scraping URLs...";
     const { data, success, error } = await $fetch("/api/scrape", {
       method: "POST",
       body: { urls },
@@ -85,8 +104,8 @@ async function handleSubmit() {
       errorMessage.value = error;
     } else {
       responseData.value = data;
-      pendingMessage.value = "Processing HTML..."
-      callAIProxy(data)
+      pendingMessage.value = "Processing HTML...";
+      callAIProxy(data);
     }
   } catch (err: any) {
     errorMessage.value = err.message || "Unknown error";
@@ -95,52 +114,28 @@ async function handleSubmit() {
 
 async function callAIProxy(scrapedPages: ParsedObject[]) {
   try {
-    const { data, success, error } = await $fetch('/api/ai', {
-      method: 'POST',
+    const { data, success, error } = await $fetch("/api/ai", {
+      method: "POST",
       body: {
         scrapedPages,
-        prompt: prompt.value
-      }
-    })
-    
+        prompt: prompt.value,
+      },
+    });
+
     if (!success) {
-      pendingMessage.value = ""
-      console.error('AI error:', error)
+      pendingMessage.value = "";
+      console.error("AI error:", error);
       errorMessage.value = error;
     } else {
       // `data.data` is the AI response
-      console.log('AI response:', data, success)
-      pendingMessage.value = ""
-      finalResult.value = data
+      console.log("AI response:", data, success);
+      pendingMessage.value = "";
+      finalResult.value = data;
     }
   } catch (err) {
-    console.error('Network or server error:', err)
+    console.error("Network or server error:", err);
   }
 }
 </script>
 
-<style scoped>
-/* .container { */
-/*   max-width: 600px; */
-/*   margin: 2rem auto; */
-/*   font-family: sans-serif; */
-/* } */
-/* .form label { */
-/*   font-weight: 600; */
-/* } */
-/* textarea, */
-/* input { */
-/*   width: 100%; */
-/*   padding: 0.5rem; */
-/*   font-size: 1rem; */
-/* } */
-/* button { */
-/*   padding: 0.5rem 1rem; */
-/*   cursor: pointer; */
-/* } */
-/* pre { */
-/*   background: #f4f4f4; */
-/*   padding: 1rem; */
-/*   white-space: pre-wrap; */
-/* } */
-</style>
+<style scoped></style>

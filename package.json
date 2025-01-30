@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/tailwindcss": "^6.13.1",
     "axios": "^1.7.9",
     "cheerio": "^1.0.0",
     "gpt-3-encoder": "^1.1.4",
@@ -17,5 +18,8 @@
     "openai": "^4.80.1",
     "vue": "latest",
     "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10"
   }
 }
