@@ -13,7 +13,7 @@
         ></textarea>
       </div>
 
-      <div style="margin-top: 1rem">
+      <div>
         <label for="prompt">Prompt / Instructions:</label><br />
         <input
           id="prompt"
