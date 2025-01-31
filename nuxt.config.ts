@@ -7,10 +7,12 @@ export default defineNuxtConfig({
     // Server-only variables
     openaiApiKey: process.env.OPENAI_API_KEY || "",
     // Public variables
-    //  public: {
-    //   supabaseUrl: process.env.SUPABASE_URL,
-    //   supabaseAnonKey: process.env.SUPABASE_ANON_KEY
-    // }
+    public: {
+      siteUrl:
+        process.env.NODE_ENV === "production"
+          ? "https://inteli-scrape.vercel.app"
+          : "http://localhost:3000", // Dynamic Site URL
+    },
   },
 
   routeRules: {

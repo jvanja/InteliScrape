@@ -7,6 +7,13 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useSupabaseUser, navigateTo } from "#imports";
 
+const user = useSupabaseUser();
+
+if(user.value) {
+  navigateTo("/dashboard");
+}
+</script>
 <style scoped></style>
