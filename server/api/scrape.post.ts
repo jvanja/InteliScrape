@@ -41,7 +41,7 @@ export default defineEventHandler(async (event: H3Event) => {
     return {
       success: false,
       data: [],
-      error: error.message || "Something went wrong.",
+      error: error.message as string || "Something went wrong.",
     };
   }
 });

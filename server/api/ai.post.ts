@@ -2,7 +2,6 @@
 
 import { H3Event } from "h3";
 import OpenAI from "openai";
-import GPT3Tokenizer from "gpt-3-encoder";
 
 // This example uses the standard "text-davinci-003" or "gpt-3.5-turbo" model.
 // You can switch to any other model or even a different provider.
@@ -12,14 +11,14 @@ const client = new OpenAI({
 
 export default defineEventHandler(async (event: H3Event) => {
   try {
-    // 1. Parse the incoming request body
-    // Expect: { text: string, prompt: string }
+    const modelName = "gpt-4o-mini-2024-07-18";
     const { scrapedPages, prompt } = await readBody(event);
     const results: Array<{
       url: string;
       result?: string;
       error?: string;
     }> = [];
+    let totalCost = 0;
 
     if (!scrapedPages || !prompt) {
       console.error("Missing required fields: scrapedPages or prompt");
@@ -27,6 +26,7 @@ export default defineEventHandler(async (event: H3Event) => {
         success: false,
         data: [],
         error: "Missing required field: prompt",
+        totalCost: 0,
       };
     }
 
@@ -36,46 +36,45 @@ export default defineEventHandler(async (event: H3Event) => {
           {
             role: "system",
             content:
-              "You are an expert data parser. Extract the required information as specified by the user.",
+              "You are an expert data parser. Extract the required information as specified by the user. Be as concise as possible and generate only the data requested using the provided format.",
           },
           {
             role: "user",
             content: `Context text:\n${page.html}\n\nUser Prompt:\n${prompt}`,
           },
         ],
-        model: "gpt-4o-mini-2024-07-18",
-        // max_tokens: 300,
+        model: modelName,
+        max_tokens: 300,
         temperature: 0,
       });
       // // 3. Extract the assistant's reply.
       const aiMessage = response.choices?.[0]?.message?.content || "";
       results.push({ url: page.url, result: aiMessage });
       // results.push({ url: page.url, result: 'mock response' });
+
+      const usage = response.usage!
+      const costUSD = calculateCost(modelName, usage);
+      console.log(
+        `Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}`,
+      );
+      console.log(`Total cost for this request: $${costUSD}`);
+      totalCost += costUSD;
     }
 
     // 4. Return the AI-generated text
     return {
       success: true,
-      data: results,
+      data: results as [],
+      error: '',
+      totalCost
     };
   } catch (err: any) {
     // Return error for debugging
     return {
       success: false,
-      error: err.message || "AI request failed.",
+      error: err.message as string || "AI request failed.",
+      data: [],
+      totalCost: 0
     };
   }
 });
-
-/**
- * Counts the approximate number of tokens in a given string
- * using a GPT-3 style tokenizer.
- *
- * @param text The input string to tokenize
- * @returns Number of tokens
- */
-export function countTokens(text: string): number {
-  // Create an instance of the tokenizer
-  const encoded = GPT3Tokenizer.encode(text);
-  return encoded.length;
-}

@@ -87,6 +87,10 @@
             <pre class="text-sm whitespace-pre-wrap">{{ finalResult }}</pre>
           </div>
 
+          <div v-if="cost" class="bg-blue-50 rounded p-4 overflow-x-auto" >
+            <div  class="text-sm whitespace-pre-wrap">{{`Total cost for this request: $${cost}`}}</div>
+          </div>
+
           <div v-if="errorMessage" class="text-red-500">
             <h3 class="text-lg font-bold mb-2">Error</h3>
             <p>{{ errorMessage }}</p>
@@ -133,6 +137,7 @@ const responseData = ref();
 const finalResult = ref(null);
 const errorMessage = ref("");
 const pendingMessage = ref("");
+const cost = ref(0);
 
 async function handleSubmit() {
   errorMessage.value = "";
@@ -167,7 +172,7 @@ async function handleSubmit() {
 
 async function callAIProxy(scrapedPages: ParsedObject[]) {
   try {
-    const { data, success, error } = await $fetch("/api/ai", {
+    const { data, success, error, totalCost } = await $fetch("/api/ai", {
       method: "POST",
       body: {
         scrapedPages,
@@ -183,6 +188,7 @@ async function callAIProxy(scrapedPages: ParsedObject[]) {
       // `data.data` is the AI response
       console.log("AI response:", data, success);
       pendingMessage.value = "";
+      cost.value = totalCost
       finalResult.value = data;
     }
   } catch (err) {
