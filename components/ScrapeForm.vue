@@ -47,7 +47,10 @@
       <p>{{ pendingMessage }}</p>
     </div>
 
-    <div v-if="finalResult" class="bg-gray-100 rounded p-4 overflow-x-auto mb-2">
+    <div
+      v-if="finalResult"
+      class="bg-gray-100 rounded p-4 overflow-x-auto mb-2"
+    >
       <h2 class="text-lg font-bold mb-2">Response Data</h2>
       <pre class="text-sm whitespace-pre-wrap">{{ finalResult }}</pre>
     </div>
@@ -66,6 +69,8 @@
 </template>
 
 <script setup lang="ts">
+import { useSupabaseUser, useSupabaseClient } from "#imports";
+
 type ParsedObject = {
   url: string;
   html?: string;
@@ -78,7 +83,7 @@ const urlsInput = ref(
 );
 const prompt = ref("");
 const responseData = ref();
-const finalResult = ref(null);
+const finalResult = ref();
 const errorMessage = ref("");
 const pendingMessage = ref("");
 const cost = ref(0);
@@ -88,6 +93,10 @@ async function handleSubmit() {
   responseData.value = [];
 
   try {
+    // save the query to the database
+    pendingMessage.value = "Saving the query to the database...";
+    await saveQuery(urlsInput.value, prompt.value);
+
     // Convert multiline URLs into an array
     const urls = urlsInput.value
       .split("\n")
@@ -101,12 +110,13 @@ async function handleSubmit() {
       body: { urls },
     });
 
-    // If there's an error field from the server, handle it
     if (!success) {
       errorMessage.value = error;
     } else {
       responseData.value = data;
-      pendingMessage.value = "Processing HTML...";
+      pendingMessage.value = "Munching websites...";
+
+      // Finally process the HTML using the AI call
       callAIProxy(data);
     }
   } catch (err: any) {
@@ -132,11 +142,25 @@ async function callAIProxy(scrapedPages: ParsedObject[]) {
       // `data.data` is the AI response
       console.log("AI response:", data, success);
       pendingMessage.value = "";
-      cost.value = totalCost
+      cost.value = totalCost;
       finalResult.value = data;
     }
   } catch (err) {
     console.error("Network or server error:", err);
   }
+}
+
+async function saveQuery(urls: string, prompt: string) {
+  const user = useSupabaseUser();
+  const userId = user.value!.id;
+  const supabase = useSupabaseClient();
+  const insertedQuery = await saveUserQuery({
+    supabase,
+    userId,
+    prompt,
+    urls,
+  });
+
+  console.log("Saved query:", insertedQuery);
 }
 </script>
