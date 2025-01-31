@@ -44,7 +44,6 @@
 
 <script setup lang="ts">
 import { useSupabaseUser, useSupabaseClient, navigateTo } from "#imports";
-import { ref } from "vue";
 
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
