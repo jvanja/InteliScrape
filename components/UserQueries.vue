@@ -13,6 +13,12 @@
             <th class="py-2 px-4 text-left font-semibold border-b">Prompt</th>
             <th class="py-2 px-4 text-left font-semibold border-b">URLs</th>
             <th class="py-2 px-4 text-left font-semibold border-b">
+              Result
+            </th>
+            <th class="py-2 px-4 text-left font-semibold border-b">
+              Cost
+            </th>
+            <th class="py-2 px-4 text-left font-semibold border-b">
               Created At
             </th>
           </tr>
@@ -26,6 +32,12 @@
             <td class="py-2 px-4 border-b">{{ query.prompt }}</td>
             <td class="py-2 px-4 border-b overflow-hidden text-clip">
               {{ query.urls }}
+            </td>
+            <td class="py-2 px-4 border-b">
+              {{ query.results }}
+            </td>
+            <td class="py-2 px-4 border-b">
+              {{ query.cost }}
             </td>
             <td class="py-2 px-4 border-b">
               {{ formatDate(query.created_at) }}
@@ -45,6 +57,8 @@ interface QueryRecord {
   user_id: string;
   prompt: string;
   urls: string[];
+  results: string;
+  cost: number;
   created_at: string;
   updated_at: string;
 }
