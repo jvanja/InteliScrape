@@ -171,7 +171,8 @@ async function saveQuery() {
     userId,
     prompt: prompt.value,
     urls: urlsInput.value,
-    results: finalResult.value
+    results: finalResult.value,
+    cost: cost.value
   })
 
   console.log('Saved query:', insertedQuery)

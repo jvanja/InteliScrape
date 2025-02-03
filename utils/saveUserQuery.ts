@@ -5,6 +5,7 @@ interface SaveQueryOptions {
   prompt: string;
   urls: string;
   results: string;
+  cost: number;
 }
 
 export default async function ({
@@ -13,6 +14,7 @@ export default async function ({
   prompt,
   urls,
   results,
+  cost,
 }: SaveQueryOptions) {
   // Insert the query record
   const { data, error } = await supabase
@@ -23,6 +25,7 @@ export default async function ({
         prompt,
         urls,
         results,
+        cost
       },
     ])
     .select(); // to return the inserted rows (Supabase v2 syntax)
