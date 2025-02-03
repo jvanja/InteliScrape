@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     // and protect conditionally from within the code
   },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/supabase", "shadcn-nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/supabase", "shadcn-nuxt", "@nuxtjs/color-mode"],
 
   tailwindcss: {
     exposeConfig: true,
@@ -40,5 +40,8 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: "./components/ui",
+  },
+  colorMode: {
+    classSuffix: "",
   },
 });
