@@ -24,7 +24,9 @@
             class="hover:bg-gray-100 transition-colors text-sm text-gray-500 hover:text-black"
           >
             <td class="py-2 px-4 border-b">{{ query.prompt }}</td>
-            <td class="py-2 px-4 border-b overflow-hidden text-clip">{{ query.urls }}</td>
+            <td class="py-2 px-4 border-b overflow-hidden text-clip">
+              {{ query.urls }}
+            </td>
             <td class="py-2 px-4 border-b">
               {{ formatDate(query.created_at) }}
             </td>

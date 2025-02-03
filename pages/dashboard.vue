@@ -9,12 +9,7 @@
           <NuxtLink to="/">InteliScrape</NuxtLink>
         </div>
         <div>
-          <button
-            class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
-            @click="logout"
-          >
-            Log Out
-          </button>
+          <Button variant="secondary" @click="logout" >Log Out</Button>
         </div>
       </div>
     </nav>
@@ -30,15 +25,12 @@
         <UserQueries v-if="!newQuery" />
         <ScrapeForm v-else />
 
-        <Button>Click me</Button>
-
-        <button
+        <Button
           v-if="!newQuery"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+          class="mt-4"
           @click="newQuery = true"
-        >
-          Create a new query
-        </button>
+        >Create a New Query</Button>
+
       </div>
 
       <div v-else class="text-center mt-10">
@@ -54,19 +46,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-
 import { useSupabaseUser, useSupabaseClient, navigateTo } from "#imports";
 import UserQueries from "~/components/UserQueries.vue";
 

@@ -1,8 +1,8 @@
 <template>
   <div class="p-4 bg-white border border-gray-200 rounded shadow-sm">
     <form
-      @submit.prevent="handleSubmit"
       class="bg-secondary-50 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      @submit.prevent="handleSubmit"
     >
       <div class="mb-4">
         <label for="urls" class="block text-gray-700 text-sm font-bold mb-2"
@@ -15,7 +15,7 @@
           required
           placeholder="https://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies&#10;https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        ></textarea>
+        />
       </div>
 
       <div class="mb-6">
@@ -32,12 +32,7 @@
         />
       </div>
 
-      <button
-        type="submit"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
-        Scrape
-      </button>
+      <Button type="submit"> Scrape</Button>
     </form>
 
     <hr class="my-8" />
@@ -69,98 +64,98 @@
 </template>
 
 <script setup lang="ts">
-import { useSupabaseUser, useSupabaseClient } from "#imports";
+import { useSupabaseUser, useSupabaseClient } from '#imports'
 
 type ParsedObject = {
-  url: string;
-  html?: string;
-  error?: string;
-};
+  url: string
+  html?: string
+  error?: string
+}
 // - TODO:
 // remove the default values
 const urlsInput = ref(
-  `https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025\nhttps://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`,
-);
-const prompt = ref("");
-const responseData = ref();
-const finalResult = ref();
-const errorMessage = ref("");
-const pendingMessage = ref("");
-const cost = ref(0);
+  `https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025\nhttps://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`
+)
+const prompt = ref('')
+const responseData = ref()
+const finalResult = ref()
+const errorMessage = ref('')
+const pendingMessage = ref('')
+const cost = ref(0)
 
 async function handleSubmit() {
-  errorMessage.value = "";
-  responseData.value = [];
+  errorMessage.value = ''
+  responseData.value = []
 
   try {
     // save the query to the database
-    pendingMessage.value = "Saving the query to the database...";
-    await saveQuery(urlsInput.value, prompt.value);
+    pendingMessage.value = 'Saving the query to the database...'
+    await saveQuery(urlsInput.value, prompt.value)
 
     // Convert multiline URLs into an array
     const urls = urlsInput.value
-      .split("\n")
+      .split('\n')
       .map((u) => u.trim())
-      .filter(Boolean);
+      .filter(Boolean)
 
     // Make a POST request to our /api/scrape endpoint
-    pendingMessage.value = "Scraping URLs...";
-    const { data, success, error } = await $fetch("/api/scrape", {
-      method: "POST",
+    pendingMessage.value = 'Scraping URLs...'
+    const { data, success, error } = await $fetch('/api/scrape', {
+      method: 'POST',
       body: { urls },
-    });
+    })
 
     if (!success) {
-      errorMessage.value = error;
+      errorMessage.value = error
     } else {
-      responseData.value = data;
-      pendingMessage.value = "Munching websites...";
+      responseData.value = data
+      pendingMessage.value = 'Munching websites...'
 
       // Finally process the HTML using the AI call
-      callAIProxy(data);
+      callAIProxy(data)
     }
-  } catch (err: any) {
-    errorMessage.value = err.message || "Unknown error";
+  } catch (err) {
+    errorMessage.value = (err as Error).message || 'Unknown error'
   }
 }
 
 async function callAIProxy(scrapedPages: ParsedObject[]) {
   try {
-    const { data, success, error, totalCost } = await $fetch("/api/ai", {
-      method: "POST",
+    const { data, success, error, totalCost } = await $fetch('/api/ai', {
+      method: 'POST',
       body: {
         scrapedPages,
         prompt: prompt.value,
       },
-    });
+    })
 
     if (!success) {
-      pendingMessage.value = "";
-      console.error("AI error:", error);
-      errorMessage.value = error;
+      pendingMessage.value = ''
+      console.error('AI error:', error)
+      errorMessage.value = error
     } else {
       // `data.data` is the AI response
-      console.log("AI response:", data, success);
-      pendingMessage.value = "";
-      cost.value = totalCost;
-      finalResult.value = data;
+      console.log('AI response:', data, success)
+      pendingMessage.value = ''
+      cost.value = totalCost
+      finalResult.value = data
     }
   } catch (err) {
-    console.error("Network or server error:", err);
+    console.error('Network or server error:', err)
   }
 }
 
 async function saveQuery(urls: string, prompt: string) {
-  const user = useSupabaseUser();
-  const userId = user.value!.id;
-  const supabase = useSupabaseClient();
+  const user = useSupabaseUser()
+  const userId = user.value!.id
+  const supabase = useSupabaseClient()
   const insertedQuery = await saveUserQuery({
     supabase,
     userId,
     prompt,
     urls,
-  });
+  })
 
-  console.log("Saved query:", insertedQuery);
+  console.log('Saved query:', insertedQuery)
 }
 </script>
