@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     // and protect conditionally from within the code
   },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/supabase"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/supabase", "shadcn-nuxt"],
 
   tailwindcss: {
     exposeConfig: true,
@@ -29,5 +29,16 @@ export default defineNuxtConfig({
   },
   supabase: {
     redirect: false, // set to true if you want automatic route-based redirects
+  },
+  shadcn: {
+    /**
+     * Prefix for all the imported component
+     */
+    prefix: "",
+    /**
+     * Directory that the component lives in.
+     * @default "./components/ui"
+     */
+    componentDir: "./components/ui",
   },
 });
