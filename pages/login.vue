@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="flex items-center justify-center">
     <div class="w-full max-w-md p-6 bg-white shadow-lg rounded">
       <h1 class="text-2xl font-bold mb-6 text-center">Log In</h1>
 
