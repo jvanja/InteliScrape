@@ -22,7 +22,12 @@ export default defineNuxtConfig({
     // and protect conditionally from within the code
   },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/supabase', 'shadcn-nuxt', '@nuxt/eslint'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/supabase',
+    'shadcn-nuxt',
+    '@nuxt/eslint',
+  ],
 
   typescript: {
     tsConfig: {
@@ -55,3 +60,4 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
 })
+
