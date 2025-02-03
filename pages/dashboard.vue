@@ -27,10 +27,18 @@
           >!
         </h1>
         <!-- Add your dashboard content here -->
-        <UserQueries  v-if="!newQuery"/>
+        <UserQueries v-if="!newQuery" />
         <ScrapeForm v-else />
 
-        <button @click="newQuery = true" v-if="!newQuery" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Create a new query</button>
+        <Button>Click me</Button>
+
+        <button
+          v-if="!newQuery"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+          @click="newQuery = true"
+        >
+          Create a new query
+        </button>
       </div>
 
       <div v-else class="text-center mt-10">
@@ -46,6 +54,19 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+
 import { useSupabaseUser, useSupabaseClient, navigateTo } from "#imports";
 import UserQueries from "~/components/UserQueries.vue";
 
@@ -57,5 +78,4 @@ async function logout() {
   await supabase.auth.signOut();
   navigateTo("/login");
 }
-
 </script>

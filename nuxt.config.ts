@@ -23,11 +23,18 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
     "@nuxtjs/supabase",
-    "shadcn-nuxt",
-    "@nuxtjs/color-mode",
     "@nuxt/eslint",
+    "shadcn-nuxt",
   ],
 
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        baseUrl: '.'
+      }
+    }
+  },
+    // "@nuxtjs/color-mode",
   tailwindcss: {
     exposeConfig: true,
     viewer: true,
