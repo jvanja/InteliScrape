@@ -1,7 +1,7 @@
 <template>
-  <div class="p-4 bg-white border border-gray-200 rounded shadow-sm">
+  <div class="p-12 bg-purple-100 border border-gray-200 rounded ">
     <form
-      class="bg-secondary-50 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      class="mb-4"
       @submit.prevent="handleSubmit"
     >
       <div class="mb-4">

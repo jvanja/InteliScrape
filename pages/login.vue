@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-bold mb-6 text-center">Log In</h1>
 
       <!-- Email/Password Login Form -->
-      <form @submit.prevent="loginUser" class="space-y-5">
+      <form class="space-y-5" @submit.prevent="loginUser">
         <div>
           <label class="block mb-1 font-medium" for="email">Email</label>
           <input
@@ -43,8 +43,8 @@
 
       <!-- Google Login Button -->
       <button
-        @click="loginWithGoogle"
         class="w-full bg-red-500 text-white py-2 rounded font-semibold hover:bg-red-600 transition-colors"
+        @click="loginWithGoogle"
       >
         <span class="inline-flex items-center">
           <svg class="h-5 w-5 mr-2" viewBox="0 0 48 48">
@@ -93,7 +93,7 @@ async function loginUser() {
   errorMessage.value = ''
   const { error } = await supabase.auth.signInWithPassword({
     email: email.value,
-    password: password.value
+    password: password.value,
   })
   if (error) {
     errorMessage.value = error.message
@@ -106,7 +106,7 @@ async function loginUser() {
 async function loginWithGoogle() {
   errorMessage.value = ''
   const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google'
+    provider: 'google',
     // If needed, pass `options: { redirectTo: '...' }` here
   })
   if (error) {
@@ -114,4 +114,3 @@ async function loginWithGoogle() {
   }
 }
 </script>
-
