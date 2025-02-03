@@ -32,7 +32,7 @@
         />
       </div>
 
-      <Button type="submit"> Scrape</Button>
+      <Button type="submit">Scrape</Button>
     </form>
 
     <hr class="my-8" />
@@ -61,6 +61,20 @@
       <p>{{ errorMessage }}</p>
     </div>
   </div>
+  <AlertDialog v-model:open="saveDialogOpen">
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Query finished!</AlertDialogTitle>
+        <AlertDialogDescription>
+          Would you like this query to be save to the database?
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel @click="saveDialogOpen = false">Cancel</AlertDialogCancel>
+        <AlertDialogAction @click="saveQuery">Save</AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>
 
 <script setup lang="ts">
@@ -82,6 +96,7 @@ const finalResult = ref()
 const errorMessage = ref('')
 const pendingMessage = ref('')
 const cost = ref(0)
+const saveDialogOpen = ref(false)
 
 async function handleSubmit() {
   errorMessage.value = ''
@@ -90,7 +105,6 @@ async function handleSubmit() {
   try {
     // save the query to the database
     pendingMessage.value = 'Saving the query to the database...'
-    await saveQuery(urlsInput.value, prompt.value)
 
     // Convert multiline URLs into an array
     const urls = urlsInput.value
@@ -111,7 +125,7 @@ async function handleSubmit() {
       responseData.value = data
       pendingMessage.value = 'Munching websites...'
 
-      // Finally process the HTML using the AI call
+      // Process the HTML using the AI call
       callAIProxy(data)
     }
   } catch (err) {
@@ -139,21 +153,25 @@ async function callAIProxy(scrapedPages: ParsedObject[]) {
       pendingMessage.value = ''
       cost.value = totalCost
       finalResult.value = data
+
+      // Finally ask user if they want the query to be saved
+      saveDialogOpen.value = true
     }
   } catch (err) {
     console.error('Network or server error:', err)
   }
 }
 
-async function saveQuery(urls: string, prompt: string) {
+async function saveQuery() {
   const user = useSupabaseUser()
   const userId = user.value!.id
   const supabase = useSupabaseClient()
   const insertedQuery = await saveUserQuery({
     supabase,
     userId,
-    prompt,
-    urls,
+    prompt: prompt.value,
+    urls: urlsInput.value,
+    results: finalResult.value
   })
 
   console.log('Saved query:', insertedQuery)
