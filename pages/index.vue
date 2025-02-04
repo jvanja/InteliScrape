@@ -1,11 +1,18 @@
 <template>
-  <div class="min-h-80 p-4 py-40 text-center">
-    <h1 class="text-5xl font-bold mb-4">
-      Mini Smart <span class="text-primary-800">Scraper</span>
+  <div class="mx-auto max-w-2xl py-16 text-center">
+    <h1 class="text-7xl font-bold mb-8">
+      Mini <span class="text-purple-600">Smart</span> Scraper
     </h1>
-    <div class="">
+    <p class="text-gray-700 text-lg">
+      ScrapeWizard is your AI-powered companion for quick, clean data
+      extraction. Give it a list of URLs and a prompt—ScrapeWizard does the
+      rest, scraping and structuring information into exactly what you need.
+      It's fast, flexible, and keeps your AI costs low by filtering out the
+      noise first.
+    </p>
+    <div class="mt-6">
       Please
-      <NuxtLink to="/dashboard" class="text-primary-800 font-bold"
+      <NuxtLink to="/login" class="text-purple-600 font-bold"
         >log in</NuxtLink
       >
       to use the app.
