@@ -10,7 +10,7 @@
     <!-- New query form -->
     <ScrapeForm v-else />
 
-    <Button v-if="!newQuery" class="mt-4" @click="newQuery = true"
+    <Button v-if="!newQuery" class="mt-8" @click="newQuery = true"
       >Create a New Query</Button
     >
   </div>
