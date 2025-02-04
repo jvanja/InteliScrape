@@ -1,9 +1,6 @@
 <template>
-  <div class="p-12 bg-purple-100 border border-gray-200 rounded ">
-    <form
-      class="mb-4"
-      @submit.prevent="handleSubmit"
-    >
+  <div class="p-12 bg-purple-100 border border-gray-200 rounded">
+    <form class="mb-4" @submit.prevent="handleSubmit">
       <div class="mb-4">
         <label for="urls" class="block text-gray-700 text-sm font-bold mb-2"
           >Enter URLs (one per line):</label
@@ -70,7 +67,9 @@
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel @click="saveDialogOpen = false">Cancel</AlertDialogCancel>
+        <AlertDialogCancel @click="saveDialogOpen = false"
+          >Cancel</AlertDialogCancel
+        >
         <AlertDialogAction @click="saveQuery">Save</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
@@ -172,7 +171,7 @@ async function saveQuery() {
     prompt: prompt.value,
     urls: urlsInput.value,
     results: finalResult.value,
-    cost: cost.value
+    cost: cost.value,
   })
 
   console.log('Saved query:', insertedQuery)
