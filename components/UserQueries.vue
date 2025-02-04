@@ -29,17 +29,17 @@
             :key="query.id"
             class="hover:bg-gray-100 transition-colors text-sm text-gray-500 hover:text-black"
           >
-            <td class="py-2 px-4 border-b">{{ query.prompt }}</td>
-            <td class="py-2 px-4 border-b overflow-hidden text-clip">
+            <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">{{ query.prompt }}</td>
+            <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">
               {{ query.urls }}
             </td>
-            <td class="py-2 px-4 border-b">
+            <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">
               {{ query.results }}
             </td>
-            <td class="py-2 px-4 border-b">
+            <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">
               {{ query.cost }}
             </td>
-            <td class="py-2 px-4 border-b">
+            <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">
               {{ formatDate(query.created_at) }}
             </td>
           </tr>

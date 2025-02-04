@@ -89,7 +89,7 @@ type ParsedObject = {
 const urlsInput = ref(
   `https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025\nhttps://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`
 )
-const prompt = ref('')
+const prompt = ref('Extract all the fuel types from this page and its corresponding excise tax rate. Use the following format "fuel_type: tax_rate". Example: "Biodiesel: 0.53". Return the data as CSV')
 const responseData = ref()
 const finalResult = ref()
 const errorMessage = ref('')
