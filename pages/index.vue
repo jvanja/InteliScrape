@@ -1,6 +1,8 @@
 <template>
   <div class="mx-auto max-w-2xl py-16 text-center">
-    <h1 class="text-7xl font-bold mb-8">
+    <div class="h-14 bg-linear-to-bl from-violet-500 to-fuchsia-500"></div>
+
+    <h1 class="text-7xl font-bold mb-8 bg-linear-to-bl from-violet-500 to-fuchsia-500">
       Mini <span class="text-purple-600">Smart</span> Scraper
     </h1>
     <p class="text-gray-700 text-lg">
