@@ -1,5 +1,5 @@
 <template>
-  <div class="p-12 bg-purple-100 border border-gray-200 rounded">
+  <div class="p-12 bg-white border border-purple-600 rounded">
     <form class="mb-4" @submit.prevent="handleSubmit">
       <div class="mb-4">
         <label for="urls" class="block text-gray-700 text-sm font-bold mb-2"
