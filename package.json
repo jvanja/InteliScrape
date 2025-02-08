@@ -25,6 +25,7 @@
     "openai": "^4.80.1",
     "radix-vue": "^1.9.13",
     "shadcn-nuxt": "^0.11.3",
+    "stripe": "^17.6.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
     "vue": "latest",

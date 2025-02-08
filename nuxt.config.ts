@@ -8,12 +8,15 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Server-only variables
     openaiApiKey: process.env.OPENAI_API_KEY || '',
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     // Public variables
     public: {
       siteUrl:
         process.env.NODE_ENV === 'production'
           ? 'https://inteli-scrape.vercel.app'
-          : 'http://localhost:3000', // Dynamic Site URL
+          : 'http://localhost:3000',
+      stripeSuccessUrl: process.env.STRIPE_SUCCESS_URL,
+      stripeCancelUrl: process.env.STRIPE_CANCEL_URL,
     },
   },
 
@@ -60,4 +63,3 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
 })
-

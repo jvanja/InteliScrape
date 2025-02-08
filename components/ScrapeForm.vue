@@ -89,7 +89,9 @@ type ParsedObject = {
 const urlsInput = ref(
   `https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025\nhttps://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`
 )
-const prompt = ref('Extract all the fuel types from this page and its corresponding excise tax rate. Use the following format "fuel_type: tax_rate". Example: "Biodiesel: 0.53". Return the data as CSV')
+const prompt = ref(
+  'Extract all the fuel types from this page and its corresponding excise tax rate. Use the following format "fuel_type: tax_rate". Example: "Biodiesel: 0.53". Return the data as CSV'
+)
 const responseData = ref()
 const finalResult = ref()
 const errorMessage = ref('')
@@ -175,5 +177,27 @@ async function saveQuery() {
   })
 
   console.log('Saved query:', insertedQuery)
+}
+
+// - TODO:
+// Call this function to charge the user. Blur the results until paid.
+async function handleCheckout(costUsd: number) {
+  try {
+    // POST to our /api/create-checkout-session endpoint
+    const { url, error } = await $fetch('/api/create-checkout-session', {
+      method: 'POST',
+      body: { costUsd: costUsd },
+    })
+    if (error) {
+      console.error('Checkout session error:', error)
+      return
+    }
+    // If we got a URL, redirect the user to Stripe Checkout
+    if (url) {
+      window.location.href = url
+    }
+  } catch (err) {
+    console.error('Error initiating checkout:', err)
+  }
 }
 </script>
