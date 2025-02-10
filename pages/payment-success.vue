@@ -13,6 +13,3 @@
   </div>
 </template>
 
-<script setup lang="ts">
-// No additional script logic is needed unless you want to retrieve and display session details.
-</script>
