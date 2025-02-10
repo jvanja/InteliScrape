@@ -29,7 +29,7 @@
 
         <button
           type="submit"
-          class="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition-colors"
+          class="w-full border border-gray-300 text-gray-600 py-2 rounded font-semibold hover:bg-blue-200 transition-colors"
         >
           Log In
         </button>
@@ -43,7 +43,7 @@
 
       <!-- Google Login Button -->
       <button
-        class="w-full bg-red-500 text-white py-2 rounded font-semibold hover:bg-red-600 transition-colors"
+        class="w-full border border-red-600 text-gray-600 py-2 rounded font-semibold hover:bg-red-200 transition-colors"
         @click="loginWithGoogle"
       >
         <span class="inline-flex items-center">

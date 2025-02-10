@@ -2,10 +2,13 @@
   <nav class="bg-white shadow">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="text-xl font-bold">
-        <NuxtLink to="/">MiniScraper</NuxtLink>
+        <NuxtLink to="/">Verity.ai</NuxtLink>
       </div>
       <div v-if="user">
         <Button variant="secondary" @click="logout">Log Out</Button>
+      </div>
+      <div else>
+        <NuxtLink to="/login" class="text-purple-600 font-bold">Log In</NuxtLink>
       </div>
     </div>
   </nav>
