@@ -16,9 +16,6 @@
               Result
             </th>
             <th class="py-2 px-4 text-left font-semibold border-b">
-              Cost
-            </th>
-            <th class="py-2 px-4 text-left font-semibold border-b">
               Created At
             </th>
           </tr>
@@ -28,6 +25,7 @@
             v-for="query in queries"
             :key="query.id"
             class="hover:bg-gray-100 transition-colors text-sm text-gray-500 hover:text-black"
+            @click="handleQueryClick(query)"
           >
             <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">{{ query.prompt }}</td>
             <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">
@@ -35,9 +33,6 @@
             </td>
             <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">
               {{ query.results }}
-            </td>
-            <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">
-              {{ query.cost }}
             </td>
             <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">
               {{ formatDate(query.created_at) }}
@@ -70,6 +65,10 @@ const isLoading = ref(true);
 // Access Supabase client + current user
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
+
+const handleQueryClick = (query: QueryRecord) => {
+  console.log(query.id)
+}
 
 onMounted(async () => {
   isLoading.value = true;
