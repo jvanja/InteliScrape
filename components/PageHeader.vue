@@ -7,7 +7,7 @@
       <div v-if="user">
         <Button variant="secondary" @click="logout">Log Out</Button>
       </div>
-      <div else>
+      <div v-else>
         <NuxtLink to="/login" class="text-purple-600 font-bold">Log In</NuxtLink>
       </div>
     </div>
