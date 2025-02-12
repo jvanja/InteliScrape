@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto max-w-2xl py-16 text-center">
+  <div class="py-16 text-center">
     <h1 class="text-7xl font-bold mb-8">Verity.ai</h1>
     <div class="container mx-auto px-4 py-8 space-y-32">
       <!-- Section 1: What the App Is -->
@@ -11,9 +11,9 @@
           content, we help you cut through the clutter to obtain insights that
           are both accurate and dependable.
         </p>
-        <!-- a visual graphics showing a complex network (nodes and lines) on one side that gradually merge into a clean organized pattern on the other side. Background color should be a simple f3f4f6 with no gradients. 
-The graphics should NOT contain any letters or symbols. -->
-        <img src="~/assets/img/section1.png" alt="Discover Nuxt 3" />
+        <ClientOnly>
+          <SectionOne />
+        </ClientOnly>
 
       </section>
 
@@ -54,6 +54,7 @@ The graphics should NOT contain any letters or symbols. -->
 </template>
 
 <script setup lang="ts">
+import { SectionOne } from '#components';
 import { useSupabaseUser, navigateTo } from '#imports'
 
 const user = useSupabaseUser()
