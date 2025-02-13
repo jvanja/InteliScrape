@@ -27,10 +27,12 @@
         </p>
         <!-- a visual graphics showing a complex network (nodes and lines) on one side that gradually merge into a clean organized pattern on the other side. Background color should be a simple f3f4f6 with no gradients. 
 The graphics should NOT contain any letters or symbols. -->
-        <div class="flow flex max-w-full">
-          <img src="~/assets/img/noise.png" class="w-1/3" />
+        <div class="flow flex gap-4 max-w-full">
+          <img src="~/assets/img/noise.png" class="w-1/4" />
           <img src="~/assets/img/arrow.svg" alt="Discover Nuxt 3" />
-          <!-- <img src="~/assets/img/document.png" alt="Discover Nuxt 3" /> -->
+          <img src="~/assets/img/noise.png" class="w-1/4" />
+          <img src="~/assets/img/arrow.svg" alt="Discover Nuxt 3" />
+          <img src="~/assets/img/noise.png" class="w-1/4" />
         </div>
       </section>
 
@@ -43,8 +45,6 @@ The graphics should NOT contain any letters or symbols. -->
           consistency. This careful approach minimizes errors, delivering
           high-quality data you can rely on.
         </p>
-        <!-- a visual graphics showing a complex network (nodes and lines) on one side that gradually merge into a clean organized pattern on the other side. Background color should be a simple f3f4f6 with no gradients. 
-The graphics should NOT contain any letters or symbols. -->
         <img src="~/assets/img/section3.png" alt="Discover Nuxt 3" />
       </section>
     </div>
