@@ -24,9 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSupabaseUser } from '#imports'
-import UserQueries from '~/components/UserQueries.vue'
-
 const user = useSupabaseUser()
 const newQuery = ref(false)
 </script>
