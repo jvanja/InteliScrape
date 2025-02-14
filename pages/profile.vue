@@ -1,103 +1,145 @@
 <template>
-  <div class="container mx-auto p-4 max-w-xl">
-    <h1 class="text-2xl font-bold mb-6">Your Profile</h1>
-    <form @submit.prevent="saveProfile" class="space-y-4">
-      <div>
-        <label class="block mb-1 font-medium">Full Name</label>
-        <input
-          type="text"
-          v-model="profile.full_name"
-          placeholder="John Doe"
-          class="w-full border border-gray-300 p-2 rounded"
-        />
-      </div>
-      <div>
-        <label class="block mb-1 font-medium">Email</label>
-        <input
-          type="email"
-          v-model="profile.email"
-          required
-          disabled
-          class="w-full border border-gray-300 p-2 rounded bg-gray-100"
-        />
-      </div>
-      <div>
-        <label class="block mb-1 font-medium">Billing Address</label>
-        <input
-          type="text"
-          v-model="profile.address"
-          placeholder="123 Main St"
-          class="w-full border border-gray-300 p-2 rounded"
-        />
-      </div>
-      <div class="grid grid-cols-2 gap-4">
+  <div class="container mx-auto p-4 max-w-2xl">
+    <!-- Tab Navigation -->
+    <nav class="flex border-b mb-6">
+      <button
+        class="px-4 py-2 focus:outline-none"
+        :class="
+          activeTab === 'profile'
+            ? 'border-b-2 border-blue-500 text-blue-500'
+            : 'text-gray-600'
+        "
+        @click="activeTab = 'profile'"
+      >
+        Profile
+      </button>
+      <button
+        class="px-4 py-2 focus:outline-none"
+        :class="
+          activeTab === 'billing'
+            ? 'border-b-2 border-blue-500 text-blue-500'
+            : 'text-gray-600'
+        "
+        @click="activeTab = 'billing'"
+      >
+        Billing
+      </button>
+    </nav>
+
+    <!-- Profile Tab Content -->
+    <div v-if="activeTab === 'profile'">
+      <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
+      <form @submit.prevent="saveProfile" class="space-y-4">
+        <!-- Full Name -->
         <div>
-          <label class="block mb-1 font-medium">City</label>
+          <label class="block mb-1 font-medium">Full Name</label>
           <input
             type="text"
-            v-model="profile.city"
-            placeholder="City"
+            v-model="profile.full_name"
+            placeholder="John Doe"
             class="w-full border border-gray-300 p-2 rounded"
           />
         </div>
+        <!-- Email -->
         <div>
-          <label class="block mb-1 font-medium">State</label>
+          <label class="block mb-1 font-medium">Email</label>
+          <input
+            type="email"
+            v-model="profile.email"
+            disabled
+            class="w-full border border-gray-300 p-2 rounded bg-gray-100"
+          />
+        </div>
+        <!-- Billing Address -->
+        <div>
+          <label class="block mb-1 font-medium">Billing Address</label>
           <input
             type="text"
-            v-model="profile.state"
-            placeholder="State"
+            v-model="profile.address"
+            placeholder="123 Main St"
             class="w-full border border-gray-300 p-2 rounded"
           />
         </div>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block mb-1 font-medium">Zip Code</label>
-          <input
-            type="text"
-            v-model="profile.zip"
-            placeholder="Zip Code"
-            class="w-full border border-gray-300 p-2 rounded"
-          />
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block mb-1 font-medium">City</label>
+            <input
+              type="text"
+              v-model="profile.city"
+              placeholder="City"
+              class="w-full border border-gray-300 p-2 rounded"
+            />
+          </div>
+          <div>
+            <label class="block mb-1 font-medium">State</label>
+            <input
+              type="text"
+              v-model="profile.state"
+              placeholder="State"
+              class="w-full border border-gray-300 p-2 rounded"
+            />
+          </div>
         </div>
-        <div>
-          <label class="block mb-1 font-medium">Country</label>
-          <input
-            type="text"
-            v-model="profile.country"
-            placeholder="Country"
-            class="w-full border border-gray-300 p-2 rounded"
-          />
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block mb-1 font-medium">Zip Code</label>
+            <input
+              type="text"
+              v-model="profile.zip"
+              placeholder="Zip Code"
+              class="w-full border border-gray-300 p-2 rounded"
+            />
+          </div>
+          <div>
+            <label class="block mb-1 font-medium">Country</label>
+            <input
+              type="text"
+              v-model="profile.country"
+              placeholder="Country"
+              class="w-full border border-gray-300 p-2 rounded"
+            />
+          </div>
         </div>
-      </div>
-      <div class="flex items-center justify-between">
-        <button
-          type="submit"
-          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-        >
-          Save Changes
-        </button>
-        <button
-          type="button"
-          @click="openPaymentPortal"
-          class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
-        >
-          Update Payment Method
-        </button>
-      </div>
-      <div v-if="message" class="text-center text-green-600 mt-2">
-        {{ message }}
-      </div>
-      <div v-if="error" class="text-center text-red-600 mt-2">{{ error }}</div>
-    </form>
+        <div class="flex items-center justify-end">
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+          >
+            Save Changes
+          </button>
+        </div>
+        <div v-if="message" class="text-center text-green-600 mt-2">
+          {{ message }}
+        </div>
+        <div v-if="error" class="text-center text-red-600 mt-2">
+          {{ error }}
+        </div>
+      </form>
+    </div>
+
+    <!-- Billing Tab Content -->
+    <div v-if="activeTab === 'billing'">
+      <h1 class="text-2xl font-bold mb-4">Billing Information</h1>
+      <!-- CardForm is imported from components -->
+      <CardForm />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Database } from '~/types/database.types'
-type Profile = Database['public']['Tables']['profiles']['Row']
+// Define a TypeScript interface for the profile data.
+interface Profile {
+  id: string
+  full_name: string
+  email: string
+  address: string
+  city: string
+  state: string
+  zip: string
+  country: string
+}
 
-// Initialize profile state. If no profile exists yet, some fields will be empty.
+// Reactive state for the profile. Initialize fields to empty strings.
 const profile = ref<Profile>({
   id: '',
   full_name: '',
@@ -107,27 +149,23 @@ const profile = ref<Profile>({
   state: '',
   zip: '',
   country: '',
-  created_at: '',
-  updated_at: ''
 })
 
-// Message and error state.
 const message = ref('')
 const error = ref('')
+const activeTab = ref<'profile' | 'billing'>('profile')
 
-// Access the Supabase client and current user.
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
-// Fetch the user's profile from Supabase.
-// Assumes that the "profiles" table has a primary key "id" corresponding to the user's id.
+// Fetch profile data for the current user.
 const fetchProfile = async () => {
   if (!user.value) return
-  const { data, error: fetchError } = await supabase.from('profiles')
+  const { data, error: fetchError } = await supabase
+    .from('profiles')
     .select('*')
     .eq('id', user.value.id)
     .maybeSingle()
-
   if (fetchError) {
     console.error('Error fetching profile:', fetchError.message)
   } else if (data) {
@@ -142,7 +180,7 @@ const fetchProfile = async () => {
       country: data.country || '',
     }
   } else {
-    // No profile exists yet—pre-fill email and id.
+    // If no profile exists yet, pre-fill email and id.
     profile.value.email = user.value.email
     profile.value.id = user.value.id
   }
@@ -152,27 +190,23 @@ onMounted(() => {
   fetchProfile()
 })
 
-// Save the profile updates to the "profiles" table.
+// Save the profile data: update if exists, otherwise insert.
 const saveProfile = async () => {
   if (!user.value) return
-
-  // First, check if a profile already exists.
   const { data: existingProfile, error: fetchError } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.value.id)
     .maybeSingle()
-
   if (fetchError) {
     error.value = fetchError.message
     message.value = ''
     return
   }
-
   if (existingProfile) {
     // Update the existing profile.
     const { error: updateError } = await supabase
-      .from('profiles')
+      .from<Profile>('profiles')
       .update({
         full_name: profile.value.full_name,
         email: profile.value.email,
@@ -193,7 +227,7 @@ const saveProfile = async () => {
   } else {
     // Insert a new profile record.
     const { error: insertError } = await supabase
-      .from('profiles')
+      .from<Profile>('profiles')
       .insert([
         {
           id: user.value.id,
@@ -215,14 +249,8 @@ const saveProfile = async () => {
     }
   }
 }
-
-// Open the payment portal for updating the payment method.
-// Replace with your actual Stripe Customer Portal integration.
-const openPaymentPortal = async () => {
-  navigateTo('/customer-portal')
-}
 </script>
 
 <style scoped>
-/* Additional styling if needed */
+/* Optional: Additional styling for tabs can be added here */
 </style>

@@ -12,6 +12,8 @@ export type Database = {
       profiles: {
         Row: {
           address: string | null
+          card_brand: string | null
+          card_last4: string | null
           city: string | null
           country: string | null
           created_at: string | null
@@ -25,6 +27,8 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          card_brand?: string | null
+          card_last4?: string | null
           city?: string | null
           country?: string | null
           created_at?: string | null
@@ -38,6 +42,8 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          card_brand?: string | null
+          card_last4?: string | null
           city?: string | null
           country?: string | null
           created_at?: string | null
