@@ -11,7 +11,7 @@
         >.
       </p>
       <button
-        @click="isEditing = true; mountCardElement()"
+        @click="handleUpdateCard"
         class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
       >
         Update Card
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
 import type { Stripe, StripeElements, PaymentMethod } from '@stripe/stripe-js'
 import { useRuntimeConfig, useSupabaseClient, useSupabaseUser } from '#imports'
@@ -92,11 +92,19 @@ const mountCardElement = () => {
   }
 }
 
+// Function to handle the "Update Card" button click.
+// It sets isEditing to true and then waits until the DOM updates before mounting the card element.
+const handleUpdateCard = async () => {
+  isEditing.value = true
+  await nextTick()
+  mountCardElement()
+}
+
 onMounted(async () => {
   // First, fetch any saved card info.
   await fetchSavedCard()
 
-  // Initialize Stripe client
+  // Initialize Stripe client.
   stripeClient.value = await loadStripe(stripePublicKey)
   if (!stripeClient.value) {
     error.value = 'Stripe failed to initialize.'
