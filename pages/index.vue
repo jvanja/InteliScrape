@@ -48,7 +48,7 @@ The graphics should NOT contain any letters or symbols. -->
         <img src="~/assets/img/section3.png" alt="Discover Nuxt 3" />
       </section>
     </div>
-    <div class="mt-6">
+      <div v-if="!user" class="mt-6">
       Please
       <NuxtLink to="/login" class="text-purple-600 font-bold">log in</NuxtLink>
       to use the app.
@@ -57,13 +57,5 @@ The graphics should NOT contain any letters or symbols. -->
 </template>
 
 <script setup lang="ts">
-import { SectionOne } from '#components'
-import { useSupabaseUser, navigateTo } from '#imports'
-
 const user = useSupabaseUser()
-
-if (user.value) {
-  navigateTo('/dashboard')
-}
 </script>
-<style scoped></style>

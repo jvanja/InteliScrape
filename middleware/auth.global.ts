@@ -2,11 +2,16 @@
 import { defineNuxtRouteMiddleware } from '#app'
 import { useSupabaseUser } from '#imports'
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to) => {
   const user = useSupabaseUser()
-  // If user is not logged in, redirect to login for protected routes
-  if (to.path.startsWith('/dashboard') || to.path.startsWith('/profile') && !user.value) {
-    return navigateTo('/login')
+  if (user.value) {
+    if (to.path.startsWith('/login') || to.path.startsWith('/signup')) {
+      console.log('redirecting')
+      return navigateTo('/dashboard')
+    }
+  } else {
+    if (to.path.startsWith('/dashboard')) {
+      return navigateTo('/login')
+    }
   }
 })
-

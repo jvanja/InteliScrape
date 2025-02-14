@@ -42,7 +42,6 @@ onMounted(() => {
   // const width = window.innerWidth
   // const height = window.innerHeight
   const width = section1.value.clientWidth
-  console.log(section1.value.clientHeight)
   const height = section1.value.clientHeight
 
   // Use an orthographic camera with (0,0) at the center.

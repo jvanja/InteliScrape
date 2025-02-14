@@ -1,37 +1,43 @@
 <template>
   <div class="flex items-center justify-center">
     <div class="w-full max-w-md p-6 bg-white shadow-lg rounded">
-      <h1 class="text-2xl font-bold mb-6 text-center">Log In</h1>
-
-      <!-- Email/Password Login Form -->
-      <form class="space-y-5" @submit.prevent="loginUser">
+      <h1 class="text-2xl font-bold mb-6 text-center">Sign Up</h1>
+      <form @submit.prevent="handleSignUp" class="space-y-5">
         <div>
-          <label class="block mb-1 font-medium" for="email">Email</label>
+          <label for="fullName" class="block mb-1 font-medium">Full Name</label>
+          <input
+            id="fullName"
+            type="text"
+            v-model="fullName"
+            placeholder="John Doe"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <label for="email" class="block mb-1 font-medium">Email</label>
           <input
             id="email"
-            v-model="email"
             type="email"
+            v-model="email"
             placeholder="you@example.com"
             class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
-
         <div>
-          <label class="block mb-1 font-medium" for="password">Password</label>
+          <label for="password" class="block mb-1 font-medium">Password</label>
           <input
             id="password"
-            v-model="password"
             type="password"
+            v-model="password"
             placeholder="••••••••"
             class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
-
         <button
           type="submit"
-          class="w-full border border-gray-300 text-gray-600 py-2 rounded font-semibold hover:bg-blue-200 transition-colors"
+          class="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition-colors"
         >
-          Log In
+          Sign Up
         </button>
       </form>
 
@@ -46,16 +52,13 @@
         class="w-full border border-red-600 text-gray-600 py-2 rounded font-semibold hover:bg-red-200 transition-colors"
         @click="loginWithGoogle"
       >
-        <GoogleButton>Login with Google</GoogleButton>
+        <GoogleButton>Sign up with Google</GoogleButton>
       </button>
 
-      <div class="text-gray-500 mt-4 text-center">
-        Don't have an account yet?
-        <NuxtLink class="text-blue-600 font-semibold" to="/signup"
-          >Sign up</NuxtLink
-        >
-      </div>
-      <!-- Error message -->
+      <p class="mt-4 text-center text-gray-600">
+        Already have an account?
+        <NuxtLink to="/login" class="text-blue-600 font-semibold">Log In</NuxtLink>
+      </p>
       <div v-if="errorMessage" class="text-red-500 mt-4 text-center">
         {{ errorMessage }}
       </div>
@@ -64,26 +67,35 @@
 </template>
 
 <script setup lang="ts">
-const supabase = useSupabaseClient()
-
+const fullName = ref('')
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
 
-// Handle email+password login
-async function loginUser() {
+const supabase = useSupabaseClient()
+const router = useRouter()
+
+const handleSignUp = async () => {
   errorMessage.value = ''
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error: signUpError } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
+    options: {
+      data: {
+        full_name: fullName.value,
+      },
+    },
   })
-  if (error) {
-    errorMessage.value = error.message
+
+  if (signUpError) {
+    errorMessage.value = signUpError.message
   } else {
-    navigateTo('/dashboard')
+    // Optionally display a success message or redirect the user.
+    // For example, redirect to the login page:
+    router.push('/login')
   }
 }
-
+//
 // Handle Google login
 async function loginWithGoogle() {
   errorMessage.value = ''

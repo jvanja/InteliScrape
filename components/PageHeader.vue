@@ -5,6 +5,7 @@
         <NuxtLink to="/">Verity.ai</NuxtLink>
       </div>
       <div v-if="user">
+        <NuxtLink to="/dashboard">Dashboard</NuxtLink>
         <Button variant="secondary" @click="logout">Log Out</Button>
       </div>
       <div v-else>
@@ -14,8 +15,6 @@
   </nav>
 </template>
 <script setup lang="ts">
-import { useSupabaseUser, useSupabaseClient, navigateTo } from "#imports";
-
 const user = useSupabaseUser()
 const supabase = useSupabaseClient();
 
