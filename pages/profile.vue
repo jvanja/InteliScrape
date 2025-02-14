@@ -94,7 +94,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSupabaseClient, useSupabaseUser, navigateTo } from '#imports'
 import type { Database } from '~/types/database.types'
 type Profile = Database['public']['Tables']['profiles']['Row']
 
