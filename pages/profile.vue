@@ -16,6 +16,7 @@
         <input
           type="email"
           v-model="profile.email"
+          required
           disabled
           class="w-full border border-gray-300 p-2 rounded bg-gray-100"
         />
@@ -93,20 +94,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { useSupabaseClient, useSupabaseUser, navigateTo } from '#imports'
-
-// Define an interface for our profile data
-interface Profile {
-  id: string
-  full_name: string
-  email: string
-  address: string
-  city: string
-  state: string
-  zip: string
-  country: string
-}
+import type { Database } from '~/types/database.types'
+type Profile = Database['public']['Tables']['profiles']['Row']
 
 // Initialize profile state. If no profile exists yet, some fields will be empty.
 const profile = ref<Profile>({
@@ -118,6 +108,8 @@ const profile = ref<Profile>({
   state: '',
   zip: '',
   country: '',
+  created_at: '',
+  updated_at: ''
 })
 
 // Message and error state.
@@ -132,8 +124,7 @@ const user = useSupabaseUser()
 // Assumes that the "profiles" table has a primary key "id" corresponding to the user's id.
 const fetchProfile = async () => {
   if (!user.value) return
-  const { data, error: fetchError } = await supabase
-    .from<Profile>('profiles')
+  const { data, error: fetchError } = await supabase.from('profiles')
     .select('*')
     .eq('id', user.value.id)
     .maybeSingle()
@@ -168,7 +159,7 @@ const saveProfile = async () => {
 
   // First, check if a profile already exists.
   const { data: existingProfile, error: fetchError } = await supabase
-    .from<Profile>('profiles')
+    .from('profiles')
     .select('*')
     .eq('id', user.value.id)
     .maybeSingle()
@@ -182,7 +173,7 @@ const saveProfile = async () => {
   if (existingProfile) {
     // Update the existing profile.
     const { error: updateError } = await supabase
-      .from<Profile>('profiles')
+      .from('profiles')
       .update({
         full_name: profile.value.full_name,
         email: profile.value.email,
@@ -203,7 +194,7 @@ const saveProfile = async () => {
   } else {
     // Insert a new profile record.
     const { error: insertError } = await supabase
-      .from<Profile>('profiles')
+      .from('profiles')
       .insert([
         {
           id: user.value.id,
