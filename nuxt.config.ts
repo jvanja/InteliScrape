@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Server-only variables
     openaiApiKey: process.env.OPENAI_API_KEY || '',
+    geminiApiKey: process.env.GEMINI_API_KEY || '',
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     // Public variables
     public: {

@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@nuxt/eslint": "^1.0.0",
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/supabase": "^1.4.6",

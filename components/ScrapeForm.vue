@@ -105,33 +105,31 @@ async function handleSubmit() {
 
   try {
 
-    handleCheckout(0.70)
+    // save the query to the database
+    pendingMessage.value = 'Saving the query to the database...'
 
-  //   // save the query to the database
-  //   pendingMessage.value = 'Saving the query to the database...'
-  //
-  //   // Convert multiline URLs into an array
-  //   const urls = urlsInput.value
-  //     .split('\n')
-  //     .map((u) => u.trim())
-  //     .filter(Boolean)
-  //
-  //   // Make a POST request to our /api/scrape endpoint
-  //   pendingMessage.value = 'Scraping URLs...'
-  //   const { data, success, error } = await $fetch('/api/scrape', {
-  //     method: 'POST',
-  //     body: { urls },
-  //   })
-  //
-  //   if (!success) {
-  //     errorMessage.value = error
-  //   } else {
-  //     responseData.value = data
-  //     pendingMessage.value = 'Munching websites...'
-  //
-  //     // Process the HTML using the AI call
-  //     callAIProxy(data)
-  //   }
+    // Convert multiline URLs into an array
+    const urls = urlsInput.value
+      .split('\n')
+      .map((u) => u.trim())
+      .filter(Boolean)
+
+    // Make a POST request to our /api/scrape endpoint
+    pendingMessage.value = 'Scraping URLs...'
+    const { data, success, error } = await $fetch('/api/scrape', {
+      method: 'POST',
+      body: { urls },
+    })
+
+    if (!success) {
+      errorMessage.value = error
+    } else {
+      responseData.value = data
+      pendingMessage.value = 'Munching websites...'
+
+      // Process the HTML using the AI call
+      callAIProxy(data)
+    }
   } catch (err) {
     errorMessage.value = (err as Error).message || 'Unknown error'
   }
@@ -146,6 +144,9 @@ async function callAIProxy(scrapedPages: ParsedObject[]) {
         prompt: prompt.value,
       },
     })
+
+    // charge user
+    handleCheckout(totalCost)
 
     if (!success) {
       pendingMessage.value = ''
