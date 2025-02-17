@@ -1,5 +1,6 @@
 import type { H3Event } from 'h3'
-import client from './ai-openai-client'
+// import client from './ai-openai-client'
+import client from './ai-gemini-client'
 
 export default defineEventHandler(async (event: H3Event) => {
   const { scrapedPages, prompt } = await readBody(event)
