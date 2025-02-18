@@ -18,7 +18,9 @@ export default defineNuxtConfig({
           : 'http://localhost:3000',
       stripeSuccessUrl: process.env.STRIPE_SUCCESS_URL,
       stripeCancelUrl: process.env.STRIPE_CANCEL_URL,
-      stripePublicKey: process.env.STRIPE_PUBLIC_KEY
+      stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
+      stripeProPriceId: process.env.STRIPE_PRO_PRICE_ID,
+      stripeRegularPriceId: process.env.STRIPE_REGULAR_PRICE_ID,
     },
   },
 
