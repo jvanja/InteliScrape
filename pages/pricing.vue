@@ -28,12 +28,12 @@
           </div>
           <div class="flex-1 px-6 pt-6 pb-8 bg-gray-50">
             <ul class="space-y-4">
-              <li class="flex items-center">
-                <CheckIcon />
+              <li class="flex items-center gap-1">
+                <Icon name="mdi:check-bold" style="color: #009629" />
                 <span>10 pages per batch</span>
               </li>
-              <li class="flex items-center">
-                <CheckIcon />
+              <li class="flex items-center gap-1">
+                <Icon name="mdi:check-bold" style="color: #009629" />
                 <span>1 batch per day</span>
               </li>
             </ul>
@@ -64,12 +64,12 @@
           </div>
           <div class="flex-1 px-6 pt-6 pb-8 bg-gray-50">
             <ul class="space-y-4">
-              <li class="flex items-center">
-                <CheckIcon />
+              <li class="flex items-center gap-1">
+                <Icon name="mdi:check-bold" style="color: #009629" />
                 <span>100 pages per batch</span>
               </li>
-              <li class="flex items-center">
-                <CheckIcon />
+              <li class="flex items-center gap-1">
+                <Icon name="mdi:check-bold" style="color: #009629" />
                 <span>10 batches per day</span>
               </li>
             </ul>
@@ -88,7 +88,7 @@
         >
           <div class="px-6 py-8 bg-white sm:p-10 sm:pb-6">
             <div class="flex items-baseline">
-              <span class="text-4xl font-extrabold text-gray-900">Custom</span>
+              <span class="text-4xl font-extrabold text-gray-900">Enterprise</span>
             </div>
             <h3 class="mt-4 text-2xl font-medium text-gray-900">Custom</h3>
             <p class="mt-2 text-base text-gray-500">
@@ -97,12 +97,12 @@
           </div>
           <div class="flex-1 px-6 pt-6 pb-8 bg-gray-50">
             <ul class="space-y-4">
-              <li class="flex items-center">
-                <CheckIcon />
+              <li class="flex items-center gap-1">
+                <Icon name="mdi:check-bold" style="color: #009629" />
                 <span>Flexible pages per batch</span>
               </li>
-              <li class="flex items-center">
-                <CheckIcon />
+              <li class="flex items-center gap-1">
+                <Icon name="mdi:check-bold" style="color: #009629" />
                 <span>Custom batch limits & usage</span>
               </li>
             </ul>
@@ -119,30 +119,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { defineComponent, h } from 'vue'
-
-const CheckIcon = defineComponent({
-  name: 'CheckIcon',
-  setup() {
-    return () =>
-      h(
-        'svg',
-        {
-          class: 'w-6 h-6 text-green-500 mr-2 flex-shrink-0',
-          fill: 'none',
-          stroke: 'currentColor',
-          'stroke-width': '2',
-          viewBox: '0 0 24 24',
-        },
-        [
-          h('path', {
-            'stroke-linecap': 'round',
-            'stroke-linejoin': 'round',
-            d: 'M5 13l4 4L19 7',
-          }),
-        ]
-      )
-  },
-})</script>
