@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          account_type: string | null
           address: string | null
           card_brand: string | null
           card_last4: string | null
@@ -26,6 +27,7 @@ export type Database = {
           zip: string | null
         }
         Insert: {
+          account_type?: string | null
           address?: string | null
           card_brand?: string | null
           card_last4?: string | null
@@ -41,6 +43,7 @@ export type Database = {
           zip?: string | null
         }
         Update: {
+          account_type?: string | null
           address?: string | null
           card_brand?: string | null
           card_last4?: string | null
