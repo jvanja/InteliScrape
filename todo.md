@@ -1,6 +1,5 @@
 * email alerts
 * download sheets or use google drive API
-* monthly accounts
-  * 20$
-  * $50 pro account for more than 10 pages
 
+# Fix
+* account billing page needs to know about the savedCard variable 

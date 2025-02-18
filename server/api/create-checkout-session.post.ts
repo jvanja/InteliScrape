@@ -2,7 +2,7 @@ import Stripe from 'stripe'
 import type { H3Event } from 'h3'
 import { useRuntimeConfig, readBody } from '#imports'
 
-export default async (event: H3Event) => {
+export default defineEventHandler(async (event: H3Event) => {
   try {
     // Parse the request body to get the cost in USD
     const body = await readBody<{ costUsd: number }>(event)
@@ -53,4 +53,4 @@ export default async (event: H3Event) => {
     console.error('Error creating checkout session:', error)
     return { error: error.message }
   }
-}
+})

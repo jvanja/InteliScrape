@@ -1,33 +1,26 @@
 <template>
-  <div>
+  <div class="mb-8">
     <!-- If a card is already saved, show its masked details -->
     <div
       v-if="savedCard && !isEditing"
-      class="mb-4 p-4 border border-gray-200 rounded bg-gray-50"
     >
-      <p class="text-gray-700">
+      <p class="text-gray-700 mb-4">
         Card on file: <strong>{{ savedCard.card_brand }}</strong> ending in
         <strong>{{ savedCard.card_last4 }}</strong
         >.
       </p>
-      <button
-        @click="handleUpdateCard"
-        class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-      >
+      <Button @click="handleUpdateCard">
         Update Card
-      </button>
+      </Button>
     </div>
 
     <!-- Card input form is shown if no saved card exists or if the user chooses to update -->
     <div v-if="!savedCard || isEditing">
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div id="card-element" class="p-4 border border-gray-300 rounded"></div>
-        <button
-          type="submit"
-          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-        >
+        <Button type="submit">
           Save Card
-        </button>
+        </Button>
       </form>
     </div>
 

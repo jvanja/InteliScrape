@@ -27,7 +27,7 @@
     </nav>
 
     <!-- Profile Tab Content -->
-    <div v-if="activeTab === 'profile'">
+    <div v-if="activeTab === 'profile'" class="p-4 border border-gray-200 rounded bg-gray-50">
       <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <!-- Full Name -->
@@ -100,36 +100,6 @@
             />
           </div>
         </div>
-        <!-- Account Type Selection -->
-        <div class="mb-4">
-          <label class="block mb-1 font-medium">Account Type</label>
-          <div class="flex space-x-4">
-            <label>
-              <input
-                type="radio"
-                value="regular"
-                v-model="profile.account_type"
-              />
-              <span class="ml-1"
-                >Regular ($20/month, max 10 pages/batch, 1 batch/day)</span
-              >
-            </label>
-            <label>
-              <input type="radio" value="pro" v-model="profile.account_type" />
-              <span class="ml-1"
-                >Pro ($50/month, max 100 pages/batch, 10 batches/day)</span
-              >
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="custom"
-                v-model="profile.account_type"
-              />
-              <span class="ml-1">Custom (Contact us)</span>
-            </label>
-          </div>
-        </div>
         <div class="flex items-center justify-end">
           <Button type="submit">Save Changes</Button>
         </div>
@@ -143,8 +113,8 @@
     </div>
 
     <!-- Billing Tab Content -->
-    <div v-if="activeTab === 'billing'">
-      <AccountBilling />
+    <div v-if="activeTab === 'billing'" class="p-4 border border-gray-200 rounded bg-gray-50">
+      <AccountBilling :account-type=profile.account_type />
     </div>
   </div>
 </template>
@@ -187,8 +157,7 @@ async function fetchProfile() {
     console.error('Error fetching profile:', fetchError.message)
   } else if (data) {
     profile.value = {
-      ...data,
-      account_type: data.account_type || 'regular',
+      ...data
     }
   } else {
     // If no profile exists yet, pre-fill email and id.
@@ -197,45 +166,11 @@ async function fetchProfile() {
   }
 }
 
-// --- Subscription Checkout ---
-// Trigger the subscription checkout for regular/pro accounts.
-async function handleSubscription(accountType: string) {
-  // For Regular and Pro accounts, start a subscription checkout session.
-  if (accountType === 'regular' || accountType === 'pro') {
-    const response = await $fetch<{ url?: string; error?: string }>(
-      '/api/create-subscription',
-      {
-        method: 'POST',
-        body: { accountType },
-      }
-    )
-    if (response.error) {
-      console.error('Subscription error:', response.error)
-      throw new Error(response.error)
-    }
-    if (response.url) {
-      // Redirect to Stripe's subscription checkout session.
-      window.location.href = response.url
-    }
-  }
-}
-
 // --- Save Profile ---
 // Save profile info and trigger subscription checkout if needed.
 async function handleSubmit() {
   errorMessage.value = ''
   message.value = ''
-
-  // Check if the account type is valid.
-  if (!['regular', 'pro', 'custom'].includes(profile.value.account_type)) {
-    errorMessage.value = 'Please select a valid account type.'
-    return
-  }
-
-  // Determine if we need to start a subscription.
-  const needsSubscription =
-    profile.value.account_type === 'regular' ||
-    profile.value.account_type === 'pro'
 
   // Check if profile already exists.
   const { data: existingProfile, error: fetchError } = await supabase
@@ -287,17 +222,6 @@ async function handleSubmit() {
   }
 
   message.value = 'Profile saved successfully.'
-
-  // Automatically trigger subscription checkout if needed.
-  try {
-    if (needsSubscription) {
-      await handleSubscription(profile.value.account_type)
-    }
-  } catch (subError: any) {
-    // If there's a subscription error, display it.
-    errorMessage.value = subError.message || 'Subscription failed.'
-    return
-  }
 }
 
 onMounted(() => {
