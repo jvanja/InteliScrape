@@ -1,10 +1,11 @@
 <template>
   <div class="p-12 bg-white border border-purple-600 rounded">
-    <form class="mb-4" @submit.prevent="handleSubmit">
+    <!-- Form Section -->
+    <form class="mb-4" @submit.prevent="confirmStart">
       <div class="mb-4">
-        <label for="urls" class="block text-gray-700 text-sm font-bold mb-2"
-          >Enter URLs (one per line):</label
-        >
+        <label for="urls" class="block text-gray-700 text-sm font-bold mb-2">
+          Enter URLs (one per line):
+        </label>
         <textarea
           id="urls"
           v-model="urlsInput"
@@ -12,13 +13,13 @@
           required
           placeholder="https://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies&#10;https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
+        ></textarea>
       </div>
 
       <div class="mb-6">
-        <label for="prompt" class="block text-gray-700 text-sm font-bold mb-2"
-          >Prompt / Instructions:</label
-        >
+        <label for="prompt" class="block text-gray-700 text-sm font-bold mb-2">
+          Prompt / Instructions:
+        </label>
         <input
           id="prompt"
           v-model="prompt"
@@ -32,8 +33,8 @@
       <Button type="submit">Scrape</Button>
     </form>
 
+    <!-- Status Messages -->
     <hr class="my-8" />
-
     <div v-if="pendingMessage" class="text-green-500">
       <h3 class="text-lg font-bold mb-2">Status</h3>
       <p>{{ pendingMessage }}</p>
@@ -57,151 +58,111 @@
       <h3 class="text-lg font-bold mb-2">Error</h3>
       <p>{{ errorMessage }}</p>
     </div>
+
+    <!-- Pre-Scraping Confirmation Dialog -->
+    <AlertDialog v-model:open="startDialogOpen">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Task is Starting</AlertDialogTitle>
+          <AlertDialogDescription>
+            Your request will run in the background. You can close your browser;
+            you'll receive an email when the task is complete.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogAction @click="executeScraping">
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   </div>
-  <AlertDialog v-model:open="saveDialogOpen">
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>Query finished!</AlertDialogTitle>
-        <AlertDialogDescription>
-          Would you like this query to be save to the database?
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel @click="saveDialogOpen = false"
-          >Cancel</AlertDialogCancel
-        >
-        <AlertDialogAction @click="saveQuery">Save</AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
 </template>
 
 <script setup lang="ts">
-import { useSupabaseUser, useSupabaseClient } from '#imports'
+// --- Reactive State ---
+const urlsInput = ref(`https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025
+https://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`)
 
-type ParsedObject = {
-  url: string
-  html?: string
-  error?: string
+const prompt = ref('Extract all the fuel types from their corresponding excise tax rates. Use the following format "fuel_type, tax_rate, quantity_with_unit". Example: "Biodiesel, 0.53, 1L" or  "LPG, 0.3, 1KG". Return the data as CSV')
+const finalResult = ref<string>('')
+const errorMessage = ref<string>('')
+const pendingMessage = ref<string>('')
+const cost = ref<number>(0)
+const startDialogOpen = ref<boolean>(false)
+
+// --- Workflow Functions ---
+// Called when the form is submitted: open the pre-scraping dialog.
+function confirmStart() {
+  startDialogOpen.value = true
 }
-// - TODO:
-// remove the default values
-const urlsInput = ref(
-  `https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025\nhttps://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`
-)
-const prompt = ref(
-  'Extract all the fuel types from this page and its corresponding excise tax rate. Use the following format "fuel_type, tax_rate, quantity_with_unit". Example: "Biodiesel, 0.53, 1L" or  "LPG, 0.3, 1KG". Return the data as CSV')
-const responseData = ref()
-const finalResult = ref()
-const errorMessage = ref('')
-const pendingMessage = ref('')
-const cost = ref(0)
-const saveDialogOpen = ref(false)
 
-async function handleSubmit() {
+// Main function executed when the user confirms the dialog.
+async function executeScraping() {
+  startDialogOpen.value = false
   errorMessage.value = ''
-  responseData.value = []
+  pendingMessage.value = ''
 
   try {
-
-    // save the query to the database
-    pendingMessage.value = 'Saving the query to the database...'
-
-    // Convert multiline URLs into an array
+    // Convert multiline URLs into an array.
     const urls = urlsInput.value
       .split('\n')
       .map((u) => u.trim())
       .filter(Boolean)
 
-    // Make a POST request to our /api/scrape endpoint
+    // Inform user about scraping.
     pendingMessage.value = 'Scraping URLs...'
-    const { data, success, error } = await $fetch('/api/scrape', {
+    const scrapeResponse = await $fetch<{
+      data: any
+      success: boolean
+      error: string
+    }>('/api/scrape', {
       method: 'POST',
       body: { urls },
     })
+    if (!scrapeResponse.success) throw new Error(scrapeResponse.error)
+    const scrapedPages = scrapeResponse.data
 
-    if (!success) {
-      errorMessage.value = error
-    } else {
-      responseData.value = data
-      pendingMessage.value = 'Munching websites...'
-
-      // Process the HTML using the AI call
-      callAIProxy(data)
-    }
-  } catch (err) {
-    errorMessage.value = (err as Error).message || 'Unknown error'
-  }
-}
-
-async function callAIProxy(scrapedPages: ParsedObject[]) {
-  try {
-    const { data, success, error, totalCost } = await $fetch('/api/ai', {
+    // Process scraped data via AI.
+    pendingMessage.value = 'Processing data with AI...'
+    const aiResponse = await $fetch<{
+      data: any
+      success: boolean
+      error: string
+      totalCost: number
+    }>('/api/ai', {
       method: 'POST',
-      body: {
-        scrapedPages,
-        prompt: prompt.value,
-      },
+      body: { scrapedPages, prompt: prompt.value },
     })
+    if (!aiResponse.success) throw new Error(aiResponse.error)
+    cost.value = aiResponse.totalCost
+    finalResult.value = aiResponse.data
 
-    // charge user
-    handleCheckout(totalCost)
+    // Automatically save query (without prompting the user).
+    await saveQuery()
 
-    if (!success) {
-      pendingMessage.value = ''
-      console.error('AI error:', error)
-      errorMessage.value = error
-    } else {
-      // `data.data` is the AI response
-      console.log('AI response:', data, success)
-      pendingMessage.value = ''
-      cost.value = totalCost
-      finalResult.value = data
-
-      // Finally ask user if they want the query to be saved
-      saveDialogOpen.value = true
-    }
-  } catch (err) {
-    console.error('Network or server error:', err)
+    pendingMessage.value =
+      'Task complete. An email will be sent with the results.'
+  } catch (err: any) {
+    errorMessage.value = err.message || 'Unknown error occurred'
+  } finally {
+    pendingMessage.value = ''
   }
 }
 
+// Automatically save the query to the database.
 async function saveQuery() {
   const user = useSupabaseUser()
-  const userId = user.value!.id
   const supabase = useSupabaseClient()
-  const insertedQuery = await saveUserQuery({
+  // Assume saveUserQuery is available globally or via auto-import
+  await saveUserQuery({
     supabase,
-    userId,
+    userId: user.value!.id,
     prompt: prompt.value,
     urls: urlsInput.value,
     results: finalResult.value,
     cost: cost.value,
   })
-
-  console.log('Saved query:', insertedQuery)
 }
 
-// - TODO:
-// Call this function to charge the user. Blur the results until paid.
-async function handleCheckout(costUsd: number) {
-  console.log(`charging user ${costUsd}`)
-  try {
-    // POST to our /api/create-checkout-session endpoint
-    const { url, error } = await $fetch('/api/create-checkout-session', {
-      method: 'POST',
-      body: { costUsd: costUsd },
-    })
-    if (error) {
-      console.error('Checkout session error:', error)
-      return
-    }
-    // If we got a URL, redirect the user to Stripe Checkout
-    if (url) {
-      window.location.href = url
-    }
-  } catch (err) {
-    console.error('Error initiating checkout:', err)
-  }
-}
 </script>
