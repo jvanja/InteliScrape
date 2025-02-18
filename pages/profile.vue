@@ -144,35 +144,19 @@
 
     <!-- Billing Tab Content -->
     <div v-if="activeTab === 'billing'">
-      <h1 class="text-2xl font-bold mb-4">Billing Information</h1>
-      <!-- Assuming CardForm is a component to update card details -->
-      <CardForm />
+      <AccountBilling />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-/* Auto-imported: 
-   - useSupabaseClient, useSupabaseUser, $fetch, Button, CardForm, etc.
-*/
-
-// --- Types ---
-type ProfileType = {
-  id: string
-  full_name: string
-  email: string
-  address: string
-  city: string
-  state: string
-  zip: string
-  country: string
-  account_type: string
-}
+// import type { Database } from '~/types/database.types'
+// type ProfileType = Database['public']['Tables']['profiles']['Row']
 
 // --- Reactive State ---
 const activeTab = ref<'profile' | 'billing'>('profile')
 
-const profile = ref<ProfileType>({
+const profile = ref({
   id: '',
   full_name: '',
   email: '',
@@ -194,7 +178,7 @@ const user = useSupabaseUser()
 async function fetchProfile() {
   if (!user.value) return
   const { data, error: fetchError } = await supabase
-    .from<ProfileType>('profiles')
+    .from('profiles')
     .select('*')
     .eq('id', user.value.id)
     .maybeSingle()
@@ -208,7 +192,7 @@ async function fetchProfile() {
     }
   } else {
     // If no profile exists yet, pre-fill email and id.
-    profile.value.email = user.value.email
+    profile.value.email = user.value.email!
     profile.value.id = user.value.id
   }
 }
@@ -255,7 +239,7 @@ async function handleSubmit() {
 
   // Check if profile already exists.
   const { data: existingProfile, error: fetchError } = await supabase
-    .from<ProfileType>('profiles')
+    .from('profiles')
     .select('*')
     .eq('id', user.value!.id)
     .maybeSingle()
@@ -264,7 +248,7 @@ async function handleSubmit() {
   if (existingProfile) {
     // Update existing profile.
     const { error: updateError } = await supabase
-      .from<ProfileType>('profiles')
+      .from('profiles')
       .update({
         full_name: profile.value.full_name,
         email: profile.value.email,
@@ -280,7 +264,7 @@ async function handleSubmit() {
   } else {
     // Insert new profile.
     const { error: insertError } = await supabase
-      .from<ProfileType>('profiles')
+      .from('profiles')
       .insert([
         {
           id: user.value!.id,
