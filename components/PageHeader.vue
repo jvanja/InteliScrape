@@ -6,6 +6,7 @@
       <div class="text-xl">
         <NuxtLink to="/">Verity.ai</NuxtLink>
       </div>
+      <NuxtLink to="/pricing">Pricing</NuxtLink>
       <div v-if="user" class="flex gap-x-4 items-center">
         <NuxtLink to="/dashboard">Dashboard</NuxtLink>
         <Button variant="secondary" @click="logout">Log Out</Button>
