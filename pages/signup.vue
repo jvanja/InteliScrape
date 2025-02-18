@@ -109,24 +109,24 @@ async function loginWithGoogle() {
 }
 
 // Call this function to charge the user. Blur the results until paid.
-async function handleCheckout(costUsd: number) {
-  console.log(`charging user ${costUsd}`)
-  try {
-    // POST to our /api/create-checkout-session endpoint
-    const { url, error } = await $fetch('/api/create-checkout-session', {
-      method: 'POST',
-      body: { costUsd: costUsd },
-    })
-    if (error) {
-      console.error('Checkout session error:', error)
-      return
-    }
-    // If we got a URL, redirect the user to Stripe Checkout
-    if (url) {
-      window.location.href = url
-    }
-  } catch (err) {
-    console.error('Error initiating checkout:', err)
-  }
-}
+// async function handleCheckout(costUsd: number) {
+//   console.log(`charging user ${costUsd}`)
+//   try {
+//     // POST to our /api/create-checkout-session endpoint
+//     const { url, error } = await $fetch('/api/create-checkout-session', {
+//       method: 'POST',
+//       body: { costUsd: costUsd },
+//     })
+//     if (error) {
+//       console.error('Checkout session error:', error)
+//       return
+//     }
+//     // If we got a URL, redirect the user to Stripe Checkout
+//     if (url) {
+//       window.location.href = url
+//     }
+//   } catch (err) {
+//     console.error('Error initiating checkout:', err)
+//   }
+// }
 </script>

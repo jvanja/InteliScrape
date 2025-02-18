@@ -29,7 +29,7 @@
     <!-- Profile Tab Content -->
     <div v-if="activeTab === 'profile'">
       <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
-      <form @submit.prevent="saveProfile" class="space-y-4">
+      <form @submit.prevent="handleSubmit" class="space-y-4">
         <!-- Full Name -->
         <div>
           <label class="block mb-1 font-medium">Full Name</label>
@@ -100,19 +100,44 @@
             />
           </div>
         </div>
+        <!-- Account Type Selection -->
+        <div class="mb-4">
+          <label class="block mb-1 font-medium">Account Type</label>
+          <div class="flex space-x-4">
+            <label>
+              <input
+                type="radio"
+                value="regular"
+                v-model="profile.account_type"
+              />
+              <span class="ml-1"
+                >Regular ($20/month, max 10 pages/batch, 1 batch/day)</span
+              >
+            </label>
+            <label>
+              <input type="radio" value="pro" v-model="profile.account_type" />
+              <span class="ml-1"
+                >Pro ($50/month, max 100 pages/batch, 10 batches/day)</span
+              >
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="custom"
+                v-model="profile.account_type"
+              />
+              <span class="ml-1">Custom (Contact us)</span>
+            </label>
+          </div>
+        </div>
         <div class="flex items-center justify-end">
-          <button
-            type="submit"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-          >
-            Save Changes
-          </button>
+          <Button type="submit">Save Changes</Button>
         </div>
         <div v-if="message" class="text-center text-green-600 mt-2">
           {{ message }}
         </div>
-        <div v-if="error" class="text-center text-red-600 mt-2">
-          {{ error }}
+        <div v-if="errorMessage" class="text-center text-red-600 mt-2">
+          {{ errorMessage }}
         </div>
       </form>
     </div>
@@ -120,15 +145,19 @@
     <!-- Billing Tab Content -->
     <div v-if="activeTab === 'billing'">
       <h1 class="text-2xl font-bold mb-4">Billing Information</h1>
-      <!-- CardForm is imported from components -->
+      <!-- Assuming CardForm is a component to update card details -->
       <CardForm />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Define a TypeScript interface for the profile data.
-interface Profile {
+/* Auto-imported: 
+   - useSupabaseClient, useSupabaseUser, $fetch, Button, CardForm, etc.
+*/
+
+// --- Types ---
+type ProfileType = {
   id: string
   full_name: string
   email: string
@@ -137,10 +166,13 @@ interface Profile {
   state: string
   zip: string
   country: string
+  account_type: string
 }
 
-// Reactive state for the profile. Initialize fields to empty strings.
-const profile = ref<Profile>({
+// --- Reactive State ---
+const activeTab = ref<'profile' | 'billing'>('profile')
+
+const profile = ref<ProfileType>({
   id: '',
   full_name: '',
   email: '',
@@ -149,35 +181,30 @@ const profile = ref<Profile>({
   state: '',
   zip: '',
   country: '',
+  account_type: 'regular', // default account type
 })
 
 const message = ref('')
-const error = ref('')
-const activeTab = ref<'profile' | 'billing'>('profile')
+const errorMessage = ref('')
 
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
-// Fetch profile data for the current user.
-const fetchProfile = async () => {
+// --- Fetch Profile ---
+async function fetchProfile() {
   if (!user.value) return
   const { data, error: fetchError } = await supabase
-    .from('profiles')
+    .from<ProfileType>('profiles')
     .select('*')
     .eq('id', user.value.id)
     .maybeSingle()
+
   if (fetchError) {
     console.error('Error fetching profile:', fetchError.message)
   } else if (data) {
     profile.value = {
-      id: data.id,
-      full_name: data.full_name || '',
-      email: data.email || user.value.email,
-      address: data.address || '',
-      city: data.city || '',
-      state: data.state || '',
-      zip: data.zip || '',
-      country: data.country || '',
+      ...data,
+      account_type: data.account_type || 'regular',
     }
   } else {
     // If no profile exists yet, pre-fill email and id.
@@ -186,27 +213,58 @@ const fetchProfile = async () => {
   }
 }
 
-onMounted(() => {
-  fetchProfile()
-})
+// --- Subscription Checkout ---
+// Trigger the subscription checkout for regular/pro accounts.
+async function handleSubscription(accountType: string) {
+  // For Regular and Pro accounts, start a subscription checkout session.
+  if (accountType === 'regular' || accountType === 'pro') {
+    const response = await $fetch<{ url?: string; error?: string }>(
+      '/api/create-subscription',
+      {
+        method: 'POST',
+        body: { accountType },
+      }
+    )
+    if (response.error) {
+      console.error('Subscription error:', response.error)
+      throw new Error(response.error)
+    }
+    if (response.url) {
+      // Redirect to Stripe's subscription checkout session.
+      window.location.href = response.url
+    }
+  }
+}
 
-// Save the profile data: update if exists, otherwise insert.
-const saveProfile = async () => {
-  if (!user.value) return
-  const { data: existingProfile, error: fetchError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.value.id)
-    .maybeSingle()
-  if (fetchError) {
-    error.value = fetchError.message
-    message.value = ''
+// --- Save Profile ---
+// Save profile info and trigger subscription checkout if needed.
+async function handleSubmit() {
+  errorMessage.value = ''
+  message.value = ''
+
+  // Check if the account type is valid.
+  if (!['regular', 'pro', 'custom'].includes(profile.value.account_type)) {
+    errorMessage.value = 'Please select a valid account type.'
     return
   }
+
+  // Determine if we need to start a subscription.
+  const needsSubscription =
+    profile.value.account_type === 'regular' ||
+    profile.value.account_type === 'pro'
+
+  // Check if profile already exists.
+  const { data: existingProfile, error: fetchError } = await supabase
+    .from<ProfileType>('profiles')
+    .select('*')
+    .eq('id', user.value!.id)
+    .maybeSingle()
+
+  let opError = null
   if (existingProfile) {
-    // Update the existing profile.
+    // Update existing profile.
     const { error: updateError } = await supabase
-      .from<Profile>('profiles')
+      .from<ProfileType>('profiles')
       .update({
         full_name: profile.value.full_name,
         email: profile.value.email,
@@ -215,22 +273,17 @@ const saveProfile = async () => {
         state: profile.value.state,
         zip: profile.value.zip,
         country: profile.value.country,
+        account_type: profile.value.account_type,
       })
-      .eq('id', user.value.id)
-    if (updateError) {
-      error.value = updateError.message
-      message.value = ''
-    } else {
-      message.value = 'Profile updated successfully.'
-      error.value = ''
-    }
+      .eq('id', user.value!.id)
+    opError = updateError
   } else {
-    // Insert a new profile record.
+    // Insert new profile.
     const { error: insertError } = await supabase
-      .from<Profile>('profiles')
+      .from<ProfileType>('profiles')
       .insert([
         {
-          id: user.value.id,
+          id: user.value!.id,
           full_name: profile.value.full_name,
           email: profile.value.email,
           address: profile.value.address,
@@ -238,19 +291,32 @@ const saveProfile = async () => {
           state: profile.value.state,
           zip: profile.value.zip,
           country: profile.value.country,
+          account_type: profile.value.account_type,
         },
       ])
-    if (insertError) {
-      error.value = insertError.message
-      message.value = ''
-    } else {
-      message.value = 'Profile saved successfully.'
-      error.value = ''
+    opError = insertError
+  }
+
+  if (opError) {
+    errorMessage.value = opError.message
+    return
+  }
+
+  message.value = 'Profile saved successfully.'
+
+  // Automatically trigger subscription checkout if needed.
+  try {
+    if (needsSubscription) {
+      await handleSubscription(profile.value.account_type)
     }
+  } catch (subError: any) {
+    // If there's a subscription error, display it.
+    errorMessage.value = subError.message || 'Subscription failed.'
+    return
   }
 }
-</script>
 
-<style scoped>
-/* Optional: Additional styling for tabs can be added here */
-</style>
+onMounted(() => {
+  fetchProfile()
+})
+</script>
