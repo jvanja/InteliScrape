@@ -30,10 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
 import type { Stripe, StripeElements, PaymentMethod } from '@stripe/stripe-js'
-import { useRuntimeConfig, useSupabaseClient, useSupabaseUser } from '#imports'
 
 const config = useRuntimeConfig()
 const stripePublicKey = config.public.stripePublicKey as string
@@ -47,9 +45,9 @@ let card: any = null
 
 // Track whether the user has a saved card
 const savedCard = ref<{
-  stripe_payment_method_id: string
-  card_brand: string
-  card_last4: string
+  stripe_payment_method_id: string | null
+  card_brand: string | null
+  card_last4: string | null
 } | null>(null)
 // Track if the user is editing/updating the card
 const isEditing = ref<boolean>(false)
