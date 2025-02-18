@@ -1,26 +1,20 @@
 <template>
   <div class="mb-8">
     <!-- If a card is already saved, show its masked details -->
-    <div
-      v-if="savedCard && !isEditing"
-    >
+    <div v-if="savedCard && !isEditing">
       <p class="text-gray-700 mb-4">
         Card on file: <strong>{{ savedCard.card_brand }}</strong> ending in
         <strong>{{ savedCard.card_last4 }}</strong
         >.
       </p>
-      <Button @click="handleUpdateCard">
-        Update Card
-      </Button>
+      <Button @click="handleUpdateCard">Update Card</Button>
     </div>
 
     <!-- Card input form is shown if no saved card exists or if the user chooses to update -->
     <div v-if="!savedCard || isEditing">
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div id="card-element" class="p-4 border border-gray-300 rounded"></div>
-        <Button type="submit">
-          Save Card
-        </Button>
+        <Button type="submit">Save Card</Button>
       </form>
     </div>
 
@@ -38,19 +32,24 @@ const stripePublicKey = config.public.stripePublicKey as string
 
 const error = ref<string>('')
 const message = ref<string>('')
-
-const stripeClient = ref<Stripe | null>(null)
-const elements = ref<StripeElements | null>(null)
-let card: any = null
-
-// Track whether the user has a saved card
+const isEditing = ref<boolean>(false)
 const savedCard = ref<{
   stripe_payment_method_id: string | null
   card_brand: string | null
   card_last4: string | null
 } | null>(null)
-// Track if the user is editing/updating the card
-const isEditing = ref<boolean>(false)
+
+const emit = defineEmits<{
+  (e: 'saved-card', card: {
+    stripe_payment_method_id: string | null
+    card_brand: string | null
+    card_last4: string | null
+  } | null): void
+}>()
+
+const stripeClient = ref<Stripe | null>(null)
+const elements = ref<StripeElements | null>(null)
+let card: any = null
 
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
@@ -67,6 +66,9 @@ const fetchSavedCard = async () => {
       console.error('Error fetching saved card:', fetchError.message)
     } else if (data && data.stripe_payment_method_id) {
       savedCard.value = data
+      emit('saved-card', data)
+    } else {
+      emit('saved-card', null)
     }
   }
 }
@@ -102,11 +104,6 @@ onMounted(async () => {
     return
   }
   elements.value = stripeClient.value.elements()
-  // If no card is saved, show the card element immediately.
-  if (!savedCard.value) {
-    isEditing.value = true
-    mountCardElement()
-  }
 })
 
 const handleSubmit = async () => {

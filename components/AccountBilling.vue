@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="text-2xl font-bold mb-4">Billing Information</h1>
-    <CardForm />
+    <CardForm @saved-card="handleSavedCard" />
     <hr class="my-6" />
     <!-- Account Type Selection -->
     <form @submit.prevent="handleSubscription" class="space-y-4">
@@ -36,6 +36,7 @@
     </form>
   </div>
 </template>
+
 <script setup lang="ts">
 const props = defineProps<{
   accountType: string
@@ -44,6 +45,19 @@ const props = defineProps<{
 const newSubscription = ref(props.accountType)
 const message = ref('')
 const errorMessage = ref('')
+const savedCard = ref<{
+  stripe_payment_method_id: string | null
+  card_brand: string | null
+  card_last4: string | null
+} | null>(null)
+
+const handleSavedCard = (card: {
+  stripe_payment_method_id: string | null
+  card_brand: string | null
+  card_last4: string | null
+} | null) => {
+  savedCard.value = card
+}
 
 // --- Subscription Checkout ---
 async function handleSubscription() {
@@ -71,9 +85,9 @@ async function handleSubscription() {
 
     if (response.error) {
       console.error('Subscription error:', response.error)
-      throw new Error(response.error)
-    }
-    if (response.url) {
+      errorMessage.value = response.error
+      message.value = ''
+    } else if (response.url) {
       // Redirect to Stripe's subscription checkout session.
       window.location.href = response.url
     }
