@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     'shadcn-nuxt',
     '@nuxt/eslint',
+    '@nuxt/icon',
   ],
 
   typescript: {
