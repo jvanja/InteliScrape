@@ -70,6 +70,7 @@ async function handleSubscription() {
     // We include the account type, the user's ID, and the saved card details if they exist.
     const payload = {
       accountType: newSubscription.value,
+      // - FIX: send customer id
       customerId: user.value!.id,
       ...(savedCard.value ? { savedCard: savedCard.value } : {}),
     }
