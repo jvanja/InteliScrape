@@ -18,7 +18,7 @@ export default defineNuxtPlugin(async () => {
 
   // Listen for auth state changes. Instead of trusting the event/session directly,
   // we re-fetch the user using getUser() to ensure the data is authentic.
-  supabase.auth.onAuthStateChange(async (event, session) => {
+  supabase.auth.onAuthStateChange(async () => {
     const {
       data: { user: updatedUser },
     } = await supabase.auth.getUser()
