@@ -82,7 +82,7 @@ const handleSignUp = async () => {
     password: password.value,
     options: {
       data: {
-        full_name: fullName.value,
+        fullName: fullName.value,
       },
     },
   })
