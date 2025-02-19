@@ -4,6 +4,7 @@
       Welcome, <span class="text-purple-600">{{ user.email }}</span
       >!
     </h1>
+    <h3>Account type: {{userStore.accountType}}</h3>
     <!-- List of previous queries -->
     <UserQueries v-if="!newQuery" />
 
@@ -26,4 +27,6 @@
 <script setup lang="ts">
 const user = useSupabaseUser()
 const newQuery = ref(false)
+const userStore = useUserStore();
+
 </script>
