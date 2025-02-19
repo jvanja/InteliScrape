@@ -1,15 +1,31 @@
+<script setup lang="ts">
+import Stripe from 'stripe'
+const config = useRuntimeConfig()
+const stripe = new Stripe(config.stripeSecretKey, {
+  apiVersion: '2025-01-27.acacia',
+})
+const route = useRoute()
+let customer: Stripe.Response<Stripe.Customer | Stripe.DeletedCustomer>
+try {
+  const session = await stripe.checkout.sessions.retrieve(
+    route?.query?.session_id as string
+  )
+  customer = await stripe.customers.retrieve(session?.customer as string)
+} catch (e) {
+  console.log(`Error ${e}`)
+}
+</script>
+
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-green-50 p-4">
-    <h1 class="text-4xl font-bold mb-4 text-green-700">Payment Successful!</h1>
-    <p class="text-lg text-gray-700 mb-8">
-      Thank you for your payment. Your transaction has been successfully processed.
+  <div class="prose lg:prose-xl m-5">
+    <p>
+      <span v-if="customer && !customer.deleted">
+        We appreciate your business {{ customer.name }}!
+      </span>
+      <span v-if="customer && customer.deleted">
+        It appears your stripe customer information has been deleted!
+      </span>
     </p>
-    <NuxtLink
-      to="/"
-      class="px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
-    >
-      Return Home
-    </NuxtLink>
+    <p>Go to Your <NuxtLink to="/dashboard">Dashboard</NuxtLink></p>
   </div>
 </template>
-
