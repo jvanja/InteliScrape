@@ -35,6 +35,7 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxt/eslint',
     '@nuxt/icon',
+    '@pinia/nuxt',
   ],
 
   typescript: {
