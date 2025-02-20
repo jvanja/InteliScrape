@@ -38,7 +38,8 @@
 </template>
 
 <script setup lang="ts">
-const newSubscription = ref('')
+const userStore = useUserStore()
+const newSubscription = ref(userStore.account_type)
 const message = ref('')
 const errorMessage = ref('')
 const savedCard = ref<{
@@ -59,15 +60,11 @@ const handleSavedCard = (card: {
 async function handleSubscription() {
   // For Regular and Pro accounts, start a subscription checkout session.
   if (newSubscription.value === 'regular' || newSubscription.value === 'pro') {
-    // Get the logged-in user (current customer)
-    const user = useSupabaseUser()
 
-    // Build the payload to pass to the subscription API.
     // We include the account type, the user's ID, and the saved card details if they exist.
     const payload = {
       accountType: newSubscription.value,
-      // - FIX: send customer id
-      customerId: user.value!.id,
+      customerId: userStore.stripe_customer_id,
       ...(savedCard.value ? { savedCard: savedCard.value } : {}),
     }
 
