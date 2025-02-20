@@ -114,61 +114,26 @@
 
     <!-- Billing Tab Content -->
     <div v-if="activeTab === 'billing'" class="p-4 border border-gray-200 rounded bg-gray-50">
-      <AccountBilling :account-type=profile.account_type />
+      <AccountBilling />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Database } from '~/types/database.types'
-type ProfileType = Database['public']['Tables']['profiles']['Row']
-
 definePageMeta({
   middleware: ['auth'],
 })
 
 // --- Reactive State ---
 const activeTab = ref<'profile' | 'billing'>('profile')
-
-const profile = ref<Partial<ProfileType>>({
-  id: '',
-  full_name: '',
-  email: '',
-  address: '',
-  city: '',
-  state: '',
-  zip: '',
-  country: '',
-  account_type: '', // default account type
-})
+const userStore = useUserStore()
+const profile = ref(userStore)
 
 const message = ref('')
 const errorMessage = ref('')
 
-const supabase = useSupabaseClient<Database>()
+const supabase = useSupabaseClient()
 const user = useSupabaseUser()
-
-// --- Fetch Profile ---
-async function fetchProfile() {
-  if (!user.value) return
-  const { data, error: fetchError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.value.id)
-    .maybeSingle()
-
-  if (fetchError) {
-    console.error('Error fetching profile:', fetchError.message)
-  } else if (data) {
-    profile.value = {
-      ...data
-    }
-  } else {
-    // If no profile exists yet, pre-fill email and id.
-    profile.value.email = user.value.email!
-    profile.value.id = user.value.id
-  }
-}
 
 // --- Save Profile ---
 // Save profile info and trigger subscription checkout if needed.
@@ -228,12 +193,10 @@ async function handleSubmit() {
   if (opError) {
     errorMessage.value = opError.message
     return
+  } else {
+    userStore.setUser(profile.value)
   }
 
   message.value = 'Profile saved successfully.'
 }
-
-onMounted(() => {
-  fetchProfile()
-})
 </script>

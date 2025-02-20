@@ -89,7 +89,6 @@ async function loginWithGoogle() {
   errorMessage.value = ''
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
-    // If needed, pass `options: { redirectTo: '...' }` here
   })
   if (error) {
     errorMessage.value = error.message

@@ -38,11 +38,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  accountType: string
-}>()
-
-const newSubscription = ref(props.accountType)
+const newSubscription = ref('')
 const message = ref('')
 const errorMessage = ref('')
 const savedCard = ref<{
