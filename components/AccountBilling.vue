@@ -7,7 +7,7 @@
     <form @submit.prevent="handleSubscription" class="space-y-4">
       <div class="mb-4">
         <label class="block mb-1 font-medium">Account Type</label>
-        <div class="flex space-x-4 mb-4">
+        <div class="flex space-x-4">
           <label>
             <input type="radio" value="regular" v-model="newSubscription" />
             <span class="ml-1">Regular $20 / month</span>
@@ -21,9 +21,8 @@
             <span class="ml-1">Custom (Contact us)</span>
           </label>
         </div>
-        <div class="text-sm text-slate-600 mb-2">
-          Check out our pricing on our pricing page
-          <NuxtLink to="/pricing">here</NuxtLink>
+        <div class="text-sm text-slate-600 mb-4">
+          Expires {{ formatDate(userStore.subscription_expires) }}
         </div>
         <Button type="submit">Update your subscription</Button>
       </div>
