@@ -1,12 +1,25 @@
 import { defineStore } from 'pinia'
+import type { Database } from '~/types/database.types'
+type ProfileType = Database['public']['Tables']['profiles']['Row']
+// interface UserStore extends ProfileType { isLoggedIn: boolean }
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    id: '' as string,
-    fullName: '' as string,
-    email: '' as string,
-    accountType: '' as string,
-    stripeCustomerId: '' as string,
+    id: '',
+    full_name: '',
+    email: '',
+    address: '',
+    city: '',
+    state: '',
+    country: '',
+    zip: '',
+    stripe_customer_id: '',
+    stripe_payment_method_id: '',
+    card_last4: '',
+    card_brand: '',
+    account_type: '',
+    updated_at: '',
+    created_at: '',
     loggedIn: false,
   }),
   getters: {
@@ -16,18 +29,9 @@ export const useUserStore = defineStore('user', {
     /**
      * Set user data after login or fetching from the backend.
      */
-    setUser(userData: {
-      id: string
-      fullName: string
-      email: string
-      accountType?: string
-      stripeCustomerId?: string
-    }) {
-      this.id = userData.id
-      this.fullName = userData.fullName
-      this.email = userData.email
-      this.accountType = userData.accountType || ''
-      this.stripeCustomerId = userData.stripeCustomerId || ''
+    setUser(userData: ProfileType) {
+      // Object.assign(this, userData)
+      Object.assign(this, userData ?? {})
       this.loggedIn = true
     },
 

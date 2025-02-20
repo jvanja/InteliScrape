@@ -1,3 +1,6 @@
+// import type { Database } from '~/types/database.types'
+// type ProfileType = Database['public']['Tables']['profiles']['Row']
+
 export default defineNuxtPlugin(async () => {
   const supabase = useSupabaseClient()
   const userStore = useUserStore()
@@ -11,7 +14,7 @@ export default defineNuxtPlugin(async () => {
     // Fetch additional profile details from your custom profiles table.
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
-      .select('account_type, stripe_customer_id')
+      .select('*')
       .eq('id', user.id)
       .maybeSingle()
 
@@ -19,13 +22,7 @@ export default defineNuxtPlugin(async () => {
       console.error(profileError)
     }
     // Set the user store using data from both auth and the profiles table.
-    userStore.setUser({
-      id: user.id,
-      fullName: user.user_metadata.full_name || user.email,
-      email: user.email!,
-      accountType: profileData?.account_type || '', // Default to empty string if not set
-      stripeCustomerId: profileData?.stripe_customer_id || '',
-    })
+    userStore.setUser(profileData)
   }
 
   // Listen for auth state changes
@@ -43,15 +40,16 @@ export default defineNuxtPlugin(async () => {
       if (profileError) {
         console.error(profileError)
       }
-      userStore.setUser({
-        id: updatedUser.id,
-        fullName: updatedUser.user_metadata.full_name || updatedUser.email,
-        email: updatedUser.email!,
-        accountType: profileData?.account_type || '',
-        stripeCustomerId: profileData?.stripe_customer_id || '',
-      })
+      userStore.setUser(profileData)
     } else {
       userStore.clearUser()
     }
   })
+
+  // function normalizeUserData(userData: ProfileType): ProfileType {
+  //   Object.keys(userData).forEach((key) => {
+  //     userData[key] = userData[key] === null ? '' : userData[key]
+  //   })
+  //   return userData
+  // }
 })
