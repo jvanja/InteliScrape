@@ -63,14 +63,12 @@
     <AlertDialog v-model:open="startDialogOpen">
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Task is Starting</AlertDialogTitle>
-          <AlertDialogDescription>
-            Your request will run in the background. You can close your browser;
-            you'll receive an email when the task is complete.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{{dialogTitle}}</AlertDialogTitle>
+          <AlertDialogDescription>{{dialogDecription}}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction @click="executeScraping">
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction @click="dialogExecute">
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -80,18 +78,29 @@
 </template>
 
 <script setup lang="ts">
-// --- Reactive State ---
-const urlsInput = ref(`https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025
-https://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`)
+const userStore = useUserStore()
 
-const prompt = ref('Extract all the fuel types from their corresponding excise tax rates. Use the following format "fuel_type, tax_rate, quantity_with_unit". Example: "Biodiesel, 0.53, 1L" or  "LPG, 0.3, 1KG". Return the data as CSV')
+/* ==========================================================================
+ Reactive state
+ ========================================================================== */
+const urlsInput =
+  ref(`https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025
+https://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies`)
+const prompt = ref(
+  'Extract all the fuel types from their corresponding excise tax rates. Use the following format "fuel_type, tax_rate, quantity_with_unit". Example: "Biodiesel, 0.53, 1L" or  "LPG, 0.3, 1KG". Return the data as CSV'
+)
 const finalResult = ref<string>('')
 const errorMessage = ref<string>('')
 const pendingMessage = ref<string>('')
 const cost = ref<number>(0)
 const startDialogOpen = ref<boolean>(false)
+const dialogTitle = userStore.accountType ? 'Task is Starting' : 'No active subscription'
+const dialogDecription = userStore.accountType ? 'Your request will run in the background. You can close your browser. You will receive an email when the task is complete.' : 'You need an active subscription to start this task.'
+const dialogExecute = () => userStore.accountType ? executeScraping : navigateTo('/profile') 
 
-// --- Workflow Functions ---
+/* ==========================================================================
+ Workflow functions  
+ ========================================================================== */
 // Called when the form is submitted: open the pre-scraping dialog.
 function confirmStart() {
   startDialogOpen.value = true
@@ -164,5 +173,4 @@ async function saveQuery() {
     cost: cost.value,
   })
 }
-
 </script>

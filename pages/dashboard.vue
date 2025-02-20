@@ -4,7 +4,6 @@
       Welcome, <span class="text-purple-600">{{ user.email }}</span
       >!
     </h1>
-    <h3>Account type: {{userStore.accountType}}</h3>
     <!-- List of previous queries -->
     <UserQueries v-if="!newQuery" />
 
@@ -15,18 +14,13 @@
       >Create a New Query</Button
     >
   </div>
-
-  <div v-else class="text-center mt-10">
-    <p class="text-xl text-red-500">You are not logged in.</p>
-    <p class="text-gray-700 mt-2">
-      <a href="/login" class="text-blue-600 hover:underline"> Go to Login </a>
-    </p>
-  </div>
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['auth'],
+})
+
 const user = useSupabaseUser()
 const newQuery = ref(false)
-const userStore = useUserStore();
-
 </script>

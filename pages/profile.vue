@@ -120,13 +120,17 @@
 </template>
 
 <script setup lang="ts">
-// import type { Database } from '~/types/database.types'
-// type ProfileType = Database['public']['Tables']['profiles']['Row']
+import type { Database } from '~/types/database.types'
+type ProfileType = Database['public']['Tables']['profiles']['Row']
+
+definePageMeta({
+  middleware: ['auth'],
+})
 
 // --- Reactive State ---
 const activeTab = ref<'profile' | 'billing'>('profile')
 
-const profile = ref({
+const profile = ref<Partial<ProfileType>>({
   id: '',
   full_name: '',
   email: '',
@@ -135,13 +139,13 @@ const profile = ref({
   state: '',
   zip: '',
   country: '',
-  account_type: 'regular', // default account type
+  account_type: '', // default account type
 })
 
 const message = ref('')
 const errorMessage = ref('')
 
-const supabase = useSupabaseClient()
+const supabase = useSupabaseClient<Database>()
 const user = useSupabaseUser()
 
 // --- Fetch Profile ---
@@ -178,6 +182,11 @@ async function handleSubmit() {
     .select('*')
     .eq('id', user.value!.id)
     .maybeSingle()
+
+  if (fetchError) {
+    errorMessage.value = fetchError.message
+    return
+  }
 
   let opError = null
   if (existingProfile) {
