@@ -106,12 +106,6 @@
         <div class="flex items-center justify-end">
           <Button type="submit">Save Changes</Button>
         </div>
-        <div v-if="message" class="text-center text-green-600 mt-2">
-          {{ message }}
-        </div>
-        <div v-if="errorMessage" class="text-center text-red-600 mt-2">
-          {{ errorMessage }}
-        </div>
       </form>
     </div>
 
@@ -126,27 +120,24 @@
 </template>
 
 <script setup lang="ts">
+import { useToast } from '@/components/ui/toast/use-toast'
+
 definePageMeta({
   middleware: ['auth'],
 })
+
+const { toast } = useToast()
 
 // --- Reactive State ---
 const activeTab = ref<'profile' | 'billing'>('profile')
 const userStore = useUserStore()
 const profile = ref(userStore)
 
-const message = ref('')
-const errorMessage = ref('')
-
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
 // --- Save Profile ---
-// Save profile info and trigger subscription checkout if needed.
 async function handleSubmit() {
-  errorMessage.value = ''
-  message.value = ''
-
   // Check if profile already exists.
   const { data: existingProfile, error: fetchError } = await supabase
     .from('profiles')
@@ -155,7 +146,12 @@ async function handleSubmit() {
     .maybeSingle()
 
   if (fetchError) {
-    errorMessage.value = fetchError.message
+    console.warn(fetchError.message)
+    toast({
+      title: 'Uh oh! Something went wrong.',
+      variant: 'destructive',
+      description: 'There was a problem with your request.',
+    })
     return
   }
 
@@ -207,9 +203,17 @@ async function handleSubmit() {
   }
 
   if (opError) {
-    errorMessage.value = opError.message
+    console.warn(opError.message)
+    toast({
+      title: 'Uh oh! Something went wrong.',
+      variant: 'destructive',
+      description: 'There was a problem with your request.',
+    })
     return
   }
-  message.value = 'Profile saved successfully.'
+  toast({
+    title: 'Update successful',
+    description: 'Your profile has been succefully updated',
+  })
 }
 </script>
