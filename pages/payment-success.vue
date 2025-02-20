@@ -1,29 +1,21 @@
 <script setup lang="ts">
-import Stripe from 'stripe'
-const config = useRuntimeConfig()
-const stripe = new Stripe(config.stripeSecretKey, {
-  apiVersion: '2025-01-27.acacia',
-})
 const route = useRoute()
-let customer: Stripe.Response<Stripe.Customer | Stripe.DeletedCustomer>
-try {
-  const session = await stripe.checkout.sessions.retrieve(
-    route?.query?.session_id as string
-  )
-  customer = await stripe.customers.retrieve(session?.customer as string)
-} catch (e) {
-  console.log(`Error ${e}`)
-}
+const { customer, error } = await $fetch<{ customer?: any; error?: string }>('/api/stripe-customer', {
+  query: { session_id: route.query.session_id }
+})
 </script>
 
 <template>
   <div class="prose lg:prose-xl m-5">
     <p>
       <span v-if="customer && !customer.deleted">
-        We appreciate your business {{ customer.name }}!
+        We appreciate your business, {{ customer.name }}!
       </span>
-      <span v-if="customer && customer.deleted">
-        It appears your stripe customer information has been deleted!
+      <span v-else-if="customer && customer.deleted">
+        It appears your Stripe customer information has been deleted!
+      </span>
+      <span v-else-if="error">
+        Error: {{ error }}
       </span>
     </p>
     <p>Go to Your <NuxtLink to="/dashboard">Dashboard</NuxtLink></p>
