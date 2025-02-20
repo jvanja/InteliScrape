@@ -1,5 +1,4 @@
 import type { H3Event } from 'h3'
-import { readBody, useRuntimeConfig } from '#imports'
 import Stripe from 'stripe'
 
 export default defineEventHandler(async (event: H3Event) => {

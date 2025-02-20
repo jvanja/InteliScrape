@@ -18,6 +18,7 @@ export const useUserStore = defineStore('user', {
     card_last4: '',
     card_brand: '',
     account_type: '',
+    subscription_expires: '',
     updated_at: '',
     created_at: '',
     loggedIn: false,
