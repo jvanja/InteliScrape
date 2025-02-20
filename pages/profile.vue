@@ -27,7 +27,10 @@
     </nav>
 
     <!-- Profile Tab Content -->
-    <div v-if="activeTab === 'profile'" class="p-4 border border-gray-200 rounded bg-gray-50">
+    <div
+      v-if="activeTab === 'profile'"
+      class="p-4 border border-gray-200 rounded bg-gray-50"
+    >
       <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <!-- Full Name -->
@@ -113,7 +116,10 @@
     </div>
 
     <!-- Billing Tab Content -->
-    <div v-if="activeTab === 'billing'" class="p-4 border border-gray-200 rounded bg-gray-50">
+    <div
+      v-if="activeTab === 'billing'"
+      class="p-4 border border-gray-200 rounded bg-gray-50"
+    >
       <AccountBilling />
     </div>
   </div>
@@ -156,7 +162,7 @@ async function handleSubmit() {
   let opError = null
   if (existingProfile) {
     // Update existing profile.
-    const { error: updateError } = await supabase
+    const { data: newProfile, error: updateError } = await supabase
       .from('profiles')
       .update({
         full_name: profile.value.full_name,
@@ -169,10 +175,15 @@ async function handleSubmit() {
         account_type: profile.value.account_type,
       })
       .eq('id', user.value!.id)
+      .maybeSingle()
+
+    if (newProfile) {
+      userStore.setUser(newProfile)
+    }
     opError = updateError
   } else {
     // Insert new profile.
-    const { error: insertError } = await supabase
+    const { data: newProfile, error: insertError } = await supabase
       .from('profiles')
       .insert([
         {
@@ -187,16 +198,18 @@ async function handleSubmit() {
           account_type: profile.value.account_type,
         },
       ])
+      .maybeSingle()
+
+    if (newProfile) {
+      userStore.setUser(newProfile)
+    }
     opError = insertError
   }
 
   if (opError) {
     errorMessage.value = opError.message
     return
-  } else {
-    userStore.setUser(profile.value)
   }
-
   message.value = 'Profile saved successfully.'
 }
 </script>
