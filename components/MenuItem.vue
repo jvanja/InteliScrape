@@ -1,38 +1,10 @@
-<!-- ~/components/MenuItem.vue -->
 <template>
-  <Collapsible
-    v-if="item.submenu"
-    :open="open"
-    @open-change="(val: boolean) => (open = val)"
+  <NuxtLink
+    :to="item.to"
+    class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+    active-class="bg-gray-900 text-white"
+    >{{ item.title }}</NuxtLink
   >
-    <CollapsibleTrigger as-child>
-      <button
-        class="flex w-full items-center justify-between py-2 font-medium text-foreground/80 hover:text-foreground"
-      >
-        {{ item.title }}
-        <component
-          :is="open ? 'ChevronDown' : 'ChevronRight'"
-          class="h-4 w-4"
-        />
-      </button>
-    </CollapsibleTrigger>
-
-    <CollapsibleContent>
-      <div class="ml-3 mt-1 flex flex-col space-y-1">
-        <!-- Recursively render sub items -->
-        <MenuItem v-for="sub in item.submenu" :key="sub.title" :item="sub" />
-      </div>
-    </CollapsibleContent>
-  </Collapsible>
-
-  <!-- Non-collapsible, normal link -->
-  <a
-    v-else
-    :href="item.href"
-    class="block py-2 font-medium text-foreground/80 hover:text-foreground"
-  >
-    {{ item.title }}
-  </a>
 </template>
 
 <script setup lang="ts">
@@ -42,6 +14,4 @@ defineProps({
     required: true,
   },
 })
-
-const open = ref(false)
 </script>
