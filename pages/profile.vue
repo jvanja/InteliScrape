@@ -27,94 +27,90 @@
     </nav>
 
     <!-- Profile Tab Content -->
-    <div
-      v-if="activeTab === 'profile'"
-      class="p-4 border border-gray-200 rounded"
-    >
-      <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
-      <form @submit.prevent="handleSubmit" class="space-y-4">
-        <!-- Full Name -->
-        <div>
-          <label class="block mb-1 font-medium">Full Name</label>
-          <input
-            type="text"
-            v-model="profile.full_name"
-            placeholder="John Doe"
-            class="w-full border border-gray-300 p-2 rounded"
-          />
-        </div>
-        <!-- Email -->
-        <div>
-          <label class="block mb-1 font-medium">Email</label>
-          <input
-            type="email"
-            v-model="profile.email"
-            disabled
-            class="w-full border border-gray-300 p-2 rounded"
-          />
-        </div>
-        <!-- Billing Address -->
-        <div>
-          <label class="block mb-1 font-medium">Billing Address</label>
-          <input
-            type="text"
-            v-model="profile.address"
-            placeholder="123 Main St"
-            class="w-full border border-gray-300 p-2 rounded"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-4">
+    <div class="p-4 border border-gray-400 rounded">
+      <div v-if="activeTab === 'profile'">
+        <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
+        <form @submit.prevent="handleSubmit" class="space-y-4">
+          <!-- Full Name -->
           <div>
-            <label class="block mb-1 font-medium">City</label>
+            <label class="block mb-1 font-medium">Full Name</label>
             <input
               type="text"
-              v-model="profile.city"
-              placeholder="City"
-              class="w-full border border-gray-300 p-2 rounded"
+              v-model="profile.full_name"
+              placeholder="John Doe"
+              class="w-full bg-gray-800 border border-gray-500 p-2"
             />
           </div>
+          <!-- Email -->
           <div>
-            <label class="block mb-1 font-medium">State</label>
+            <label class="block mb-1 font-medium">Email</label>
+            <input
+              type="email"
+              v-model="profile.email"
+              disabled
+              class="w-full bg-gray-800 border border-gray-500 p-2"
+            />
+          </div>
+          <!-- Billing Address -->
+          <div>
+            <label class="block mb-1 font-medium">Billing Address</label>
             <input
               type="text"
-              v-model="profile.state"
-              placeholder="State"
-              class="w-full border border-gray-300 p-2 rounded"
+              v-model="profile.address"
+              placeholder="123 Main St"
+              class="w-full bg-gray-800 border border-gray-500 p-2"
             />
           </div>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block mb-1 font-medium">Zip Code</label>
-            <input
-              type="text"
-              v-model="profile.zip"
-              placeholder="Zip Code"
-              class="w-full border border-gray-300 p-2 rounded"
-            />
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 font-medium">City</label>
+              <input
+                type="text"
+                v-model="profile.city"
+                placeholder="City"
+                class="w-full bg-gray-800 border border-gray-500 p-2"
+              />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">State</label>
+              <input
+                type="text"
+                v-model="profile.state"
+                placeholder="State"
+                class="w-full bg-gray-800 border border-gray-500 p-2"
+              />
+            </div>
           </div>
-          <div>
-            <label class="block mb-1 font-medium">Country</label>
-            <input
-              type="text"
-              v-model="profile.country"
-              placeholder="Country"
-              class="w-full border border-gray-300 p-2 rounded"
-            />
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 font-medium">Zip Code</label>
+              <input
+                type="text"
+                v-model="profile.zip"
+                placeholder="Zip Code"
+                class="w-full bg-gray-800 border border-gray-500 p-2"
+              />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Country</label>
+              <input
+                type="text"
+                v-model="profile.country"
+                placeholder="Country"
+                class="w-full bg-gray-800 border border-gray-500 p-2"
+              />
+            </div>
           </div>
-        </div>
-        <div class="flex items-center justify-end">
-          <Button type="submit">Save Changes</Button>
-        </div>
-      </form>
-    </div>
+          <div class="flex items-center justify-end">
+            <Button type="submit">Save Changes</Button>
+          </div>
+        </form>
+      </div>
 
-    <!-- Billing Tab Content -->
-    <div
-      v-if="activeTab === 'billing'"
-      class="p-4 border border-gray-200 rounded"
-    >
-      <AccountBilling />
+      <!-- Billing Tab Content -->
+      <div v-if="activeTab === 'billing'">
+        <AccountBilling />
+      </div>
     </div>
   </div>
 </template>

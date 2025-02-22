@@ -13,7 +13,7 @@
     <!-- Card input form is shown if no saved card exists or if the user chooses to update -->
     <div v-if="!savedCard || isEditing">
       <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div id="card-element" class="p-4 border border-gray-300 rounded"></div>
+        <div id="card-element" class="p-4 border border-gray-800 rounded"></div>
         <Button type="submit">Save Card</Button>
       </form>
     </div>
