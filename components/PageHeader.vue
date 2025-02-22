@@ -49,7 +49,6 @@
 
 <script setup lang="ts">
 import { NuxtLink } from '#components'
-import { Menu } from 'lucide-vue-next'
 
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()
