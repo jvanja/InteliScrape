@@ -38,7 +38,7 @@
               type="text"
               v-model="profile.full_name"
               placeholder="John Doe"
-              class="w-full bg-gray-800 border border-gray-500 p-2"
+              class="w-full bg-background border border-gray-500 p-2"
             />
           </div>
           <!-- Email -->
@@ -48,7 +48,7 @@
               type="email"
               v-model="profile.email"
               disabled
-              class="w-full bg-gray-800 border border-gray-500 p-2"
+              class="w-full bg-background border border-gray-500 p-2"
             />
           </div>
           <!-- Billing Address -->
@@ -58,7 +58,7 @@
               type="text"
               v-model="profile.address"
               placeholder="123 Main St"
-              class="w-full bg-gray-800 border border-gray-500 p-2"
+              class="w-full bg-background border border-gray-500 p-2"
             />
           </div>
           <div class="grid grid-cols-2 gap-4">
@@ -68,7 +68,7 @@
                 type="text"
                 v-model="profile.city"
                 placeholder="City"
-                class="w-full bg-gray-800 border border-gray-500 p-2"
+                class="w-full bg-background border border-gray-500 p-2"
               />
             </div>
             <div>
@@ -77,7 +77,7 @@
                 type="text"
                 v-model="profile.state"
                 placeholder="State"
-                class="w-full bg-gray-800 border border-gray-500 p-2"
+                class="w-full bg-background border border-gray-500 p-2"
               />
             </div>
           </div>
@@ -88,7 +88,7 @@
                 type="text"
                 v-model="profile.zip"
                 placeholder="Zip Code"
-                class="w-full bg-gray-800 border border-gray-500 p-2"
+                class="w-full bg-background border border-gray-500 p-2"
               />
             </div>
             <div>
@@ -97,7 +97,7 @@
                 type="text"
                 v-model="profile.country"
                 placeholder="Country"
-                class="w-full bg-gray-800 border border-gray-500 p-2"
+                class="w-full bg-background border border-gray-500 p-2"
               />
             </div>
           </div>

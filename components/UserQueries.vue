@@ -8,7 +8,7 @@
     </div>
     <div v-else>
       <table class="min-w-full border-collapse shadow-sm text-left">
-        <thead class="bg-gray-800">
+        <thead>
           <tr>
             <th class="py-2 px-4 text-left font-semibold border-b">Prompt</th>
             <th class="py-2 px-4 text-left font-semibold border-b">URLs</th>
