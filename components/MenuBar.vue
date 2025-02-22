@@ -10,21 +10,18 @@
       <!-- Desktop Nav -->
       <nav class="hidden gap-4 md:flex">
         <!-- Example links (you can also make them collapsible, if you want) -->
-        <a
+        <NuxtLink
           v-for="item in menuItems"
           :key="item.title"
-          :href="item.href"
+          :to="item.to"
           class="text-sm font-medium text-foreground/80 hover:text-foreground"
         >
           {{ item.title }}
-        </a>
+        </NuxtLink>
       </nav>
 
       <!-- Mobile Hamburger Button -->
-      <Sheet
-        :open="sheetOpen"
-        @open-change="(val: boolean) => (sheetOpen = val)"
-      >
+      <Sheet>
         <SheetTrigger as-child>
           <Button variant="ghost" size="icon" class="md:hidden">
             <!-- Using lucide-vue’s Menu icon -->
@@ -49,28 +46,9 @@
 </template>
 
 <script setup lang="ts">
-// Example data for your menu (some may have nested items, etc.)
-interface MenuItemData {
-  title: string
-  href?: string
-  submenu?: MenuItemData[]
-}
-
 // The top-level nav items
-const menuItems: MenuItemData[] = [
-  { title: 'Home', href: '/' },
-  { title: 'About', href: '/about' },
-  {
-    title: 'Services',
-    submenu: [
-      { title: 'Web Development', href: '/services/webdev' },
-      { title: 'Mobile Apps', href: '/services/mobile' },
-      { title: 'SEO', href: '/services/seo' },
-    ],
-  },
-  { title: 'Contact', href: '/contact' },
+const menuItems = [
+  { title: 'Pricing', to: '/pricing' },
+  { title: 'Contact', to: '/contact' },
 ]
-
-// Control if the Sheet is open
-const sheetOpen = ref(false)
 </script>

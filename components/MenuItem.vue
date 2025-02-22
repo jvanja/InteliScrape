@@ -3,7 +3,7 @@
   <Collapsible
     v-if="item.submenu"
     :open="open"
-    @open-change="(val) => (open = val)"
+    @open-change="(val: boolean) => (open = val)"
   >
     <CollapsibleTrigger as-child>
       <button
@@ -36,28 +36,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { PropType } from 'vue'
-
-// The same interface as in MenuBar
-interface MenuItemData {
-  title: string
-  href?: string
-  submenu?: MenuItemData[]
-}
-
-const props = defineProps({
+defineProps({
   item: {
-    type: Object as PropType<MenuItemData>,
+    type: Object,
     required: true,
   },
 })
 
 const open = ref(false)
-
-/**
- * NOTE: The following UI components should be imported (or auto-imported):
- * - Collapsible, CollapsibleTrigger, CollapsibleContent
- * - ChevronDown, ChevronRight from lucide-vue
- */
 </script>
