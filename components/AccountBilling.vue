@@ -21,7 +21,7 @@
             <span class="ml-1">Custom (Contact us)</span>
           </label>
         </div>
-        <div class="text-sm text-slate-600 mb-4">
+        <div class="text-sm mb-4">
           Expires {{ formatDate(userStore.subscription_expires) }}
         </div>
         <Button type="submit">Update your subscription</Button>

@@ -5,7 +5,7 @@
       <!-- Section 1: What the App Is -->
       <section class="text-center">
         <h2 class="text-3xl font-bold mb-8">What is Verity?</h2>
-        <p class="text-lg text-gray-700 max-w-3xl mx-auto mb-8">
+        <p class="text-lg max-w-3xl mx-auto mb-8">
           Verity is a platform that extracts and organizes web-based information
           into coherent, reliable data. In an era of overwhelming online
           content, we help you cut through the clutter to obtain insights that
@@ -19,7 +19,7 @@
       <!-- Section 2: How Does It Work? -->
       <section class="text-center">
         <h2 class="text-3xl font-bold mb-8">How Does It Work?</h2>
-        <p class="text-lg text-gray-700 max-w-3xl mx-auto mb-8">
+        <p class="text-lg max-w-3xl mx-auto mb-8">
           Our process begins by intelligently isolating relevant content from
           raw web data. We then apply robust cleaning and processing methods to
           refine the output, ensuring the final data is structured and free of
@@ -39,7 +39,7 @@ The graphics should NOT contain any letters or symbols. -->
       <!-- Section 3: Ensuring Data Integrity -->
       <section class="text-center">
         <h2 class="text-3xl font-bold mb-8">Ensuring Data Integrity</h2>
-        <p class="text-lg text-gray-700 max-w-3xl mx-auto mb-8">
+        <p class="text-lg max-w-3xl mx-auto mb-8">
           We place a strong emphasis on data integrity. Verity employs layered
           validation and comprehensive checks to confirm accuracy and
           consistency. This careful approach minimizes errors, delivering

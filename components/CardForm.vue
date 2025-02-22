@@ -2,7 +2,7 @@
   <div class="mb-8">
     <!-- If a card is already saved, show its masked details -->
     <div v-if="savedCard && !isEditing">
-      <p class="text-gray-700 mb-4">
+      <p class="mb-4">
         Card on file: <strong>{{ savedCard.card_brand }}</strong> ending in
         <strong>{{ savedCard.card_last4 }}</strong
         >.

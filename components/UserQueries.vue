@@ -1,14 +1,14 @@
 <template>
-  <div class="p-4 bg-white border border-gray-200 rounded shadow-sm">
+  <div class="p-4 border border-gray-200 rounded shadow-sm">
     <h1 class="text-2xl font-bold mb-4">Your Queries</h1>
 
-    <div v-if="isLoading" class="text-gray-600">Loading queries...</div>
-    <div v-else-if="queries.length === 0" class="text-gray-600">
+    <div v-if="isLoading">Loading queries...</div>
+    <div v-else-if="queries.length === 0">
       No queries found.
     </div>
     <div v-else>
-      <table class="min-w-full border-collapse bg-white shadow-sm text-left">
-        <thead class="bg-gray-50">
+      <table class="min-w-full border-collapse shadow-sm text-left">
+        <thead class="bg-gray-800">
           <tr>
             <th class="py-2 px-4 text-left font-semibold border-b">Prompt</th>
             <th class="py-2 px-4 text-left font-semibold border-b">URLs</th>
@@ -24,7 +24,7 @@
           <tr
             v-for="query in queries"
             :key="query.id"
-            class="hover:bg-gray-100 transition-colors text-sm text-gray-500 hover:text-black"
+            class="hover:bg-gray-600 transition-colors text-sm hover:text-white"
             @click="handleQueryClick(query)"
           >
             <td class="py-2 px-4 border-b overflow-hidden text-ellipsis whitespace-nowrap max-w-1">{{ query.prompt }}</td>

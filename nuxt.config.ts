@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2025-02-22',
   devtools: { enabled: true },
 
   css: ['~/assets/css/main.css'],
@@ -35,6 +35,7 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxt/eslint',
     '@nuxt/icon',
+    '@nuxtjs/color-mode',
     '@pinia/nuxt',
   ],
 
@@ -45,14 +46,20 @@ export default defineNuxtConfig({
       },
     },
   },
-  // "@nuxtjs/color-mode",
+
   tailwindcss: {
     exposeConfig: true,
     viewer: true,
     // and more...
   },
+
   supabase: {
     redirect: false, // set to true if you want automatic route-based redirects
+  },
+
+  colorMode: {
+    preference: 'dark',
+    fallback: 'dark',
   },
   shadcn: {
     /**
@@ -65,7 +72,5 @@ export default defineNuxtConfig({
      */
     componentDir: './components/ui',
   },
-  colorMode: {
-    classSuffix: '',
-  },
 })
+

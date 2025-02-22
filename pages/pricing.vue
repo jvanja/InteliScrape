@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-12">
+  <div class="min-h-screen py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-gray-800">Our Pricing Plans</h1>
-        <p class="mt-4 text-xl text-gray-600">
+        <h1 class="text-4xl font-bold">Our Pricing Plans</h1>
+        <p class="mt-4 text-xl">
           Choose the plan that best fits your needs.
         </p>
       </div>
@@ -14,19 +14,19 @@
         <div
           class="flex flex-col rounded-lg shadow-lg overflow-hidden border border-gray-200"
         >
-          <div class="px-6 py-8 bg-white sm:p-10 sm:pb-6">
+          <div class="px-6 py-8 sm:p-10 sm:pb-6">
             <div class="flex items-baseline">
-              <span class="text-4xl font-extrabold text-gray-900">$20</span>
-              <span class="ml-1 text-xl font-semibold text-gray-500"
+              <span class="text-4xl font-extrabold">$20</span>
+              <span class="ml-1 text-xl font-semibold"
                 >/month</span
               >
             </div>
-            <h3 class="mt-4 text-2xl font-medium text-gray-900">Regular</h3>
-            <p class="mt-2 text-base text-gray-500">
+            <h3 class="mt-4 text-2xl font-medium">Regular</h3>
+            <p class="mt-2 text-base">
               Maximum 10 pages per batch and 1 batch per day.
             </p>
           </div>
-          <div class="flex-1 px-6 pt-6 pb-8 bg-gray-50">
+          <div class="flex-1 px-6 pt-6 pb-8">
             <ul class="space-y-4">
               <li class="flex items-center gap-1">
                 <Icon name="mdi:check-bold" style="color: #009629" />
@@ -50,19 +50,18 @@
         <div
           class="flex flex-col rounded-lg shadow-lg overflow-hidden border border-gray-200"
         >
-          <div class="px-6 py-8 bg-white sm:p-10 sm:pb-6">
+          <div class="px-6 py-8 sm:p-10 sm:pb-6">
             <div class="flex items-baseline">
-              <span class="text-4xl font-extrabold text-gray-900">$50</span>
-              <span class="ml-1 text-xl font-semibold text-gray-500"
-                >/month</span
+              <span class="text-4xl font-extrabold">$50</span>
+              <span class="ml-1 text-xl font-semibold">/month</span
               >
             </div>
-            <h3 class="mt-4 text-2xl font-medium text-gray-900">Pro</h3>
-            <p class="mt-2 text-base text-gray-500">
+            <h3 class="mt-4 text-2xl font-medium">Pro</h3>
+            <p class="mt-2 text-base">
               Maximum 100 pages per batch and up to 10 batches per day.
             </p>
           </div>
-          <div class="flex-1 px-6 pt-6 pb-8 bg-gray-50">
+          <div class="flex-1 px-6 pt-6 pb-8">
             <ul class="space-y-4">
               <li class="flex items-center gap-1">
                 <Icon name="mdi:check-bold" style="color: #009629" />
@@ -86,16 +85,16 @@
         <div
           class="flex flex-col rounded-lg shadow-lg overflow-hidden border border-gray-200"
         >
-          <div class="px-6 py-8 bg-white sm:p-10 sm:pb-6">
+          <div class="px-6 py-8 sm:p-10 sm:pb-6">
             <div class="flex items-baseline">
-              <span class="text-4xl font-extrabold text-gray-900">Enterprise</span>
+              <span class="text-4xl font-extrabold">Enterprise</span>
             </div>
-            <h3 class="mt-4 text-2xl font-medium text-gray-900">Custom</h3>
-            <p class="mt-2 text-base text-gray-500">
+            <h3 class="mt-4 text-2xl font-medium">Custom</h3>
+            <p class="mt-2 text-base">
               Tailored solutions for enterprise-level needs.
             </p>
           </div>
-          <div class="flex-1 px-6 pt-6 pb-8 bg-gray-50">
+          <div class="flex-1 px-6 pt-6 pb-8">
             <ul class="space-y-4">
               <li class="flex items-center gap-1">
                 <Icon name="mdi:check-bold" style="color: #009629" />

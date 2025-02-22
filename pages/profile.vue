@@ -7,7 +7,7 @@
         :class="
           activeTab === 'profile'
             ? 'border-b-2 border-blue-500 text-blue-500'
-            : 'text-gray-600'
+            : ''
         "
         @click="activeTab = 'profile'"
       >
@@ -18,7 +18,7 @@
         :class="
           activeTab === 'billing'
             ? 'border-b-2 border-blue-500 text-blue-500'
-            : 'text-gray-600'
+            : ''
         "
         @click="activeTab = 'billing'"
       >
@@ -29,7 +29,7 @@
     <!-- Profile Tab Content -->
     <div
       v-if="activeTab === 'profile'"
-      class="p-4 border border-gray-200 rounded bg-gray-50"
+      class="p-4 border border-gray-200 rounded"
     >
       <h1 class="text-2xl font-bold mb-4">Your Profile</h1>
       <form @submit.prevent="handleSubmit" class="space-y-4">
@@ -50,7 +50,7 @@
             type="email"
             v-model="profile.email"
             disabled
-            class="w-full border border-gray-300 p-2 rounded bg-gray-100"
+            class="w-full border border-gray-300 p-2 rounded"
           />
         </div>
         <!-- Billing Address -->
@@ -112,7 +112,7 @@
     <!-- Billing Tab Content -->
     <div
       v-if="activeTab === 'billing'"
-      class="p-4 border border-gray-200 rounded bg-gray-50"
+      class="p-4 border border-gray-200 rounded"
     >
       <AccountBilling />
     </div>
