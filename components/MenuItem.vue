@@ -7,7 +7,7 @@
   >
     <CollapsibleTrigger as-child>
       <button
-        class="flex w-full items-center justify-between py-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+        class="flex w-full items-center justify-between py-2 font-medium text-foreground/80 hover:text-foreground"
       >
         {{ item.title }}
         <component
@@ -29,7 +29,7 @@
   <a
     v-else
     :href="item.href"
-    class="block py-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+    class="block py-2 font-medium text-foreground/80 hover:text-foreground"
   >
     {{ item.title }}
   </a>
