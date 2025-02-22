@@ -1,9 +1,9 @@
 <template>
-  <div class="p-12 bg-white border border-purple-600 rounded">
+  <div class="p-12 border border-purple-600 rounded">
     <!-- Form Section -->
     <form class="mb-4" @submit.prevent="confirmStart">
       <div class="mb-4">
-        <label for="urls" class="block text-gray-700 text-sm font-bold mb-2">
+        <label for="urls" class="block text-sm font-bold mb-2">
           Enter URLs (one per line):
         </label>
         <textarea
@@ -12,12 +12,12 @@
           rows="5"
           required
           placeholder="https://www.ecologie.gouv.fr/politiques-publiques/fiscalite-energies&#10;https://www.gov.uk/government/publications/fuel-duty-extending-the-temporary-cut-in-rates-to-march-2025/extension-to-the-cut-in-fuel-duty-rates-to-march-2025"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800"
         ></textarea>
       </div>
 
       <div class="mb-6">
-        <label for="prompt" class="block text-gray-700 text-sm font-bold mb-2">
+        <label for="prompt" class="block text-sm font-bold mb-2">
           Prompt / Instructions:
         </label>
         <input
@@ -26,7 +26,7 @@
           type="text"
           required
           placeholder="e.g. Extract the GDP growth rate (be as detailed as possible)"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800"
         />
       </div>
 
@@ -94,9 +94,9 @@ const errorMessage = ref<string>('')
 const pendingMessage = ref<string>('')
 const cost = ref<number>(0)
 const startDialogOpen = ref<boolean>(false)
-const dialogTitle = userStore.accountType ? 'Task is Starting' : 'No active subscription'
-const dialogDecription = userStore.accountType ? 'Your request will run in the background. You can close your browser. You will receive an email when the task is complete.' : 'You need an active subscription to start this task.'
-const dialogExecute = () => userStore.accountType ? executeScraping : navigateTo('/profile') 
+const dialogTitle = userStore.account_type ? 'Task is Starting' : 'No active subscription'
+const dialogDecription = userStore.account_type ? 'Your request will run in the background. You can close your browser. You will receive an email when the task is complete.' : 'You need an active subscription to start this task.'
+const dialogExecute = () => userStore.account_type ? executeScraping : navigateTo('/profile') 
 
 /* ==========================================================================
  Workflow functions  
