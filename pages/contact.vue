@@ -30,16 +30,14 @@ const onSubmit = form.handleSubmit((values) => {
 })
 </script>
 <template>
-  <div class="min-h-screen py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Header -->
-      <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold">Contact Us</h1>
+  <div class="w-full flex flex-col items-center">
+    <div class="mx-auto max-w-full px-6 lg:px-8 flex flex-col items-center">
+      <div class="w-full lg:w-auto mx-auto max-w-4xl lg:text-center">
+        <h1 class="text-black dark:text-white text-4xl font-semibold max-w-xs sm:max-w-none md:text-6xl !leading-tight">
+          Contact Us
+        </h1>
       </div>
-      <form
-        @submit="onSubmit"
-        class="w-full max-w-lg mx-auto space-y-6"
-      >
+      <form @submit="onSubmit" class="w-[32rem] max-w-full space-y-5 mt-16">
         <FormField v-slot="{ componentField }" name="name">
           <FormItem>
             <FormLabel>Name</FormLabel>
