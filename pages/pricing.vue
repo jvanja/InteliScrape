@@ -12,7 +12,6 @@ export interface PricingTier {
   name: string
   id: string
   href: string
-  discountPrice: string | Record<string, string>
   price: string | Record<string, string>
   description: string
   features: string[]
@@ -33,7 +32,6 @@ const pricingTiers: PricingTier[] = [
     id: '0',
     href: '/profile',
     price: { '1': '$20', '2': '$200' },
-    discountPrice: { '1': '', '2': '' },
     description: `Maximum 10 pages per batch and 1 batch per day.`,
     features: ['10 pages per batch', '1 batch per day'],
     featured: false,
@@ -46,7 +44,6 @@ const pricingTiers: PricingTier[] = [
     id: '1',
     href: '/profile',
     price: { '1': '$50', '2': '$500' },
-    discountPrice: { '1': '', '2': '' },
     description: `When you grow, need more power and flexibility.`,
     features: ['100 pages per batch', '10 batches per day'],
     featured: false,
@@ -59,7 +56,6 @@ const pricingTiers: PricingTier[] = [
     id: '2',
     href: '/contact',
     price: { '1': 'Custom', '2': 'Custom' },
-    discountPrice: { '1': '', '2': '' },
     description: `Tailored solutions for enterprise-level needs.`,
     features: ['Flexible pages per batch', 'Custom batch limits & usage'],
     featured: true,
@@ -182,29 +178,12 @@ const setFrequency = (option: PricingTierFrequency) => {
                     ? 'text-white dark:text-black'
                     : 'text-black dark:text-white',
                   'text-4xl font-bold tracking-tight',
-                  tier.discountPrice && tier.discountPrice[frequency.value]
-                    ? 'line-through'
-                    : '',
                 ]"
               >
                 {{
                   typeof tier.price === 'string'
                     ? tier.price
                     : tier.price[frequency.value]
-                }}
-              </span>
-
-              <span
-                :class="[
-                  tier.featured
-                    ? 'text-white dark:text-black'
-                    : 'text-black dark:text-white',
-                ]"
-              >
-                {{
-                  typeof tier.discountPrice === 'string'
-                    ? tier.discountPrice
-                    : tier.discountPrice[frequency.value]
                 }}
               </span>
 
